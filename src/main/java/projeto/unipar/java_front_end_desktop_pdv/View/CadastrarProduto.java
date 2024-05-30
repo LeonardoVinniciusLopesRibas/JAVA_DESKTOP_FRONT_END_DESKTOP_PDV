@@ -5,16 +5,20 @@ import projeto.unipar.java_front_end_desktop_pdv.Util.NumberOnlyDocument;
 import javax.swing.JFrame;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class CadastrarProduto extends javax.swing.JFrame {
 
     private Produto produto = new Produto();
+    private SetIcon setIcon = new SetIcon();
     
     public CadastrarProduto(JFrame parent) {
         initComponents();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         jtfValorProduto.setDocument(new NumberOnlyDocument());
+        setIcon.setSalvarButton(jbSalvar);
+        setIcon.setIconLimparCampos(jbLimparCampos);
     }
 
     @SuppressWarnings("unchecked")
@@ -190,7 +194,10 @@ public class CadastrarProduto extends javax.swing.JFrame {
     private void getDadosCampos(Produto produto){
         
         ProdutoService produtoService = new ProdutoService();
-        produtoService.post(produto);
+        produtoService.post(produto, this);
+    }
+    
+    public void limparCampos(){
         jtfCategoria.setText("");
         jtfNomeProduto.setText("");
         jtfValorProduto.setText("");

@@ -1,9 +1,10 @@
-
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JFrame;
-import javax.swing.JRootPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
@@ -12,13 +13,44 @@ public class VisualizarProduto extends javax.swing.JFrame {
 
     private Produto produto = new Produto();
     private ProdutoService produtoService = new ProdutoService();
+    private DefaultTableModel model;
+    private VisualizarProduto visualizarProduto;
 
-    
     public VisualizarProduto(JFrame parent) {
         initComponents();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         preencherTabela();
+        addDoubleClickAction();
+    }
+
+    private void addDoubleClickAction() {
+        jTable1.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    if (row != -1) {
+                        // Obtém os dados da linha selecionada
+                        Long id = (Long) model.getValueAt(row, 0);
+                        String descricao = (String) model.getValueAt(row, 1);
+                        double valor = (double) model.getValueAt(row, 2);
+                        String categoria = (String) model.getValueAt(row, 3);
+
+                        // Preenche o objeto produto
+                        produto.setId(id);
+                        produto.setDescricao(descricao);
+                        produto.setValor_unitario(valor);
+                        produto.setCategoria(categoria);
+
+                        EditarProduto editarProduto = new EditarProduto(VisualizarProduto.this);
+                        editarProduto.setVisible(true);
+                        editarProduto.recebeDados(produto);
+
+                    }
+                }
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -47,13 +79,14 @@ public class VisualizarProduto extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -89,15 +122,21 @@ public class VisualizarProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void preencherTabela() {
+    public void preencherTabela() {
         List<Produto> produtos = produtoService.getProdutosFromAPI();
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0); // Limpa a tabela antes de preencher
         for (Produto produto : produtos) {
-            Object[] row = {produto.getId(), produto.getDescricao(), produto.getValor_unitario(), produto.getCategoria()};
+            Object[] row = {
+                produto.getId(),
+                produto.getDescricao(),
+                produto.getValor_unitario(),
+                produto.getCategoria()
+            };
             model.addRow(row);
         }
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;

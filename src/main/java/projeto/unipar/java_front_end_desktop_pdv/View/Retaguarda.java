@@ -1,17 +1,27 @@
-
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class Retaguarda extends javax.swing.JFrame {
-
+    
+    private SetIcon setIcon = new SetIcon();
+    
     private boolean isCadastrarProdutoOpen;
     private CadastrarProduto cadastrarProdutoInstance;
     
     private boolean isVisualizarProdutoOpen;
     private VisualizarProduto visualizarProdutoInstance;
+    
+    private boolean isCadastrarClienteOpen;
+    private CadastrarCliente cadastrarClienteInstance;
+    
+    private boolean isVisualizarClienteOpen;
+    private VisualizarCliente visualizarClienteInstance;
     
     public Retaguarda() {
         initComponents();
@@ -19,6 +29,41 @@ public class Retaguarda extends javax.swing.JFrame {
         isVisualizarProdutoOpen = false;
         cadastrarProdutoInstance = null;
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setIcon.setIconCadastrar_Editar(jmCadastrarEditar);
+        setIcon.setIconProduto(jmProduto);
+        setIcon.setIconCadastrarProduto(jmiCadastrarProduto);
+        setIcon.setIconVisualizarProduto(jmiVisualizarProduto);
+        setIcon.setIconCliente(jmCliente);
+        setIcon.setIconCadastrarCliente(jmiCadastrarCliente);
+        setIcon.setIconVisualizarCliente(jmiVisualizarCliente);                
+        setIcon.setIconVenda(jmVenda);
+        setIcon.setIconPdv(jmiPdv);
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int response = JOptionPane.showConfirmDialog(
+                        Retaguarda.this,
+                        "Você tem certeza que deseja fechar o sistema?",
+                        "Confirmar saída",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if (response == JOptionPane.YES_OPTION) {
+                    Retaguarda.this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    if(isCadastrarProdutoOpen)
+                        cadastrarProdutoInstance.dispose();
+                    if(isVisualizarProdutoOpen)
+                        visualizarProdutoInstance.dispose();
+                    if(isCadastrarClienteOpen)
+                        cadastrarClienteInstance.dispose();
+                    if(isVisualizarClienteOpen)
+                        visualizarClienteInstance.dispose();
+                } else {
+                    Retaguarda.this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                }
+            }
+        });
 
     }
 
@@ -31,13 +76,15 @@ public class Retaguarda extends javax.swing.JFrame {
         jmCadastrarEditar = new javax.swing.JMenu();
         jmProduto = new javax.swing.JMenu();
         jmiCadastrarProduto = new javax.swing.JMenuItem();
-        jmiVisualizar = new javax.swing.JMenuItem();
+        jmiVisualizarProduto = new javax.swing.JMenuItem();
         jmCliente = new javax.swing.JMenu();
         jmiCadastrarCliente = new javax.swing.JMenuItem();
+        jmiVisualizarCliente = new javax.swing.JMenuItem();
         jmVenda = new javax.swing.JMenu();
         jmiPdv = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("PDV");
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -62,20 +109,33 @@ public class Retaguarda extends javax.swing.JFrame {
         });
         jmProduto.add(jmiCadastrarProduto);
 
-        jmiVisualizar.setText("Visualizar");
-        jmiVisualizar.addActionListener(new java.awt.event.ActionListener() {
+        jmiVisualizarProduto.setText("Visualizar");
+        jmiVisualizarProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmiVisualizarActionPerformed(evt);
+                jmiVisualizarProdutoActionPerformed(evt);
             }
         });
-        jmProduto.add(jmiVisualizar);
+        jmProduto.add(jmiVisualizarProduto);
 
         jmCadastrarEditar.add(jmProduto);
 
         jmCliente.setText("Cliente");
 
         jmiCadastrarCliente.setText("Cadastrar");
+        jmiCadastrarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiCadastrarClienteActionPerformed(evt);
+            }
+        });
         jmCliente.add(jmiCadastrarCliente);
+
+        jmiVisualizarCliente.setText("Visualizar");
+        jmiVisualizarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiVisualizarClienteActionPerformed(evt);
+            }
+        });
+        jmCliente.add(jmiVisualizarCliente);
 
         jmCadastrarEditar.add(jmCliente);
 
@@ -130,7 +190,7 @@ public class Retaguarda extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jmiCadastrarProdutoActionPerformed
 
-    private void jmiVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiVisualizarActionPerformed
+    private void jmiVisualizarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiVisualizarProdutoActionPerformed
         // TODO add your handling code here:
         if(isVisualizarProdutoOpen){
             visualizarProdutoInstance.toFront();
@@ -155,7 +215,60 @@ public class Retaguarda extends javax.swing.JFrame {
                 
             });
         }
-    }//GEN-LAST:event_jmiVisualizarActionPerformed
+    }//GEN-LAST:event_jmiVisualizarProdutoActionPerformed
+
+    private void jmiCadastrarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCadastrarClienteActionPerformed
+        // TODO add your handling code here:
+        if(isCadastrarClienteOpen){
+            cadastrarClienteInstance.toFront();
+            cadastrarClienteInstance.repaint();
+        }else {
+            isCadastrarClienteOpen = true;
+            cadastrarClienteInstance = new CadastrarCliente(this);
+            cadastrarClienteInstance.setVisible(true);
+            cadastrarClienteInstance.addWindowListener(new WindowAdapter(){
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    isCadastrarClienteOpen = false;
+                    cadastrarClienteInstance = null;
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    isCadastrarClienteOpen = false;
+                    cadastrarClienteInstance = null;
+                   
+                }
+                
+            });
+        }
+    }//GEN-LAST:event_jmiCadastrarClienteActionPerformed
+
+    private void jmiVisualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiVisualizarClienteActionPerformed
+        // TODO add your handling code here:
+        if(isVisualizarClienteOpen){
+            visualizarClienteInstance.toFront();
+            visualizarClienteInstance.repaint();
+        }else{
+            isVisualizarClienteOpen = true;
+            visualizarClienteInstance = new VisualizarCliente(this);
+            visualizarClienteInstance.setVisible(true);
+            visualizarClienteInstance.addWindowListener(new WindowAdapter(){
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    isVisualizarClienteOpen = false;
+                    visualizarClienteInstance = null;
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    isVisualizarClienteOpen = false;
+                    visualizarClienteInstance = null;
+                }
+                
+            });
+        }
+    }//GEN-LAST:event_jmiVisualizarClienteActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -198,6 +311,7 @@ public class Retaguarda extends javax.swing.JFrame {
     private javax.swing.JMenuItem jmiCadastrarCliente;
     private javax.swing.JMenuItem jmiCadastrarProduto;
     private javax.swing.JMenuItem jmiPdv;
-    private javax.swing.JMenuItem jmiVisualizar;
+    private javax.swing.JMenuItem jmiVisualizarCliente;
+    private javax.swing.JMenuItem jmiVisualizarProduto;
     // End of variables declaration//GEN-END:variables
 }
