@@ -5,6 +5,7 @@ projeto\unipar\java_front_end_desktop_pdv\View\CadastrarCliente$1.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$8.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda.class
 projeto\unipar\java_front_end_desktop_pdv\Util\SetIcon.class
+projeto\unipar\java_front_end_desktop_pdv\Util\Log.class
 projeto\unipar\java_front_end_desktop_pdv\View\EditarCliente.class
 projeto\unipar\java_front_end_desktop_pdv\Services\ProdutoService.class
 projeto\unipar\java_front_end_desktop_pdv\Model\Venda.class
@@ -27,6 +28,7 @@ projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$2.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$7.class
 projeto\unipar\java_front_end_desktop_pdv\Model\Produto$1.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$6.class
+projeto\unipar\java_front_end_desktop_pdv\View\Pdv.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$1.class
 projeto\unipar\java_front_end_desktop_pdv\View\CadastrarProduto$2.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$4.class

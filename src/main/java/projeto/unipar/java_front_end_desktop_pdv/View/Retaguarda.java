@@ -2,12 +2,14 @@ package projeto.unipar.java_front_end_desktop_pdv.View;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.ImageIcon;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class Retaguarda extends javax.swing.JFrame {
+    
+    Log log = new Log();
     
     private SetIcon setIcon = new SetIcon();
     
@@ -59,6 +61,7 @@ public class Retaguarda extends javax.swing.JFrame {
                         cadastrarClienteInstance.dispose();
                     if(isVisualizarClienteOpen)
                         visualizarClienteInstance.dispose();
+                    log.escreverLog("Aplicação fechada com sucesso", 200);
                 } else {
                     Retaguarda.this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 }
@@ -72,6 +75,7 @@ public class Retaguarda extends javax.swing.JFrame {
     private void initComponents() {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmCadastrarEditar = new javax.swing.JMenu();
         jmProduto = new javax.swing.JMenu();
@@ -86,15 +90,28 @@ public class Retaguarda extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PDV");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText(" PARA ABRIR O LOG, UTILIZE A COMBINAÇÃO DE TECLAS (WINDOWS + R) E COLOQUE .pdvlog");
+
+        jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1366, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1354, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 745, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap(621, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(92, 92, 92))
         );
 
         jmCadastrarEditar.setText("Cadastrar/Editar");
@@ -173,6 +190,7 @@ public class Retaguarda extends javax.swing.JFrame {
             isCadastrarProdutoOpen = true;
             cadastrarProdutoInstance = new CadastrarProduto(this);
             cadastrarProdutoInstance.setVisible(true);
+            log.escreverLog("Tela de cadastro de produtos aberta", 200);
             cadastrarProdutoInstance.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -199,6 +217,7 @@ public class Retaguarda extends javax.swing.JFrame {
             isVisualizarProdutoOpen = true;
             visualizarProdutoInstance = new VisualizarProduto(this);
             visualizarProdutoInstance.setVisible(true);
+            log.escreverLog("Tela de visualização de produtos aberta", 200);
             visualizarProdutoInstance.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -226,6 +245,7 @@ public class Retaguarda extends javax.swing.JFrame {
             isCadastrarClienteOpen = true;
             cadastrarClienteInstance = new CadastrarCliente(this);
             cadastrarClienteInstance.setVisible(true);
+            log.escreverLog("Tela de cadastro de clientes aberta", 200);
             cadastrarClienteInstance.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -253,6 +273,7 @@ public class Retaguarda extends javax.swing.JFrame {
             isVisualizarClienteOpen = true;
             visualizarClienteInstance = new VisualizarCliente(this);
             visualizarClienteInstance.setVisible(true);
+            log.escreverLog("Tela de visualização de clientes aberta", 200);
             visualizarClienteInstance.addWindowListener(new WindowAdapter(){
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -297,12 +318,15 @@ public class Retaguarda extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Retaguarda().setVisible(true);
+                Log log = new Log();
+                log.escreverLog("Aplicação iniciada", 200);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jmCadastrarEditar;
     private javax.swing.JMenu jmCliente;

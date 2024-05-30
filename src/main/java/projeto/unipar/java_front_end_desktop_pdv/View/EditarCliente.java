@@ -2,17 +2,21 @@ package projeto.unipar.java_front_end_desktop_pdv.View;
 
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class EditarCliente extends javax.swing.JFrame {
 
+    private Log log = new Log();
     private SetIcon setIcon = new SetIcon();
     private Cliente cliente = new Cliente();
-    private ClienteService clienteService = new ClienteService();
+    private ClienteService clienteService = new ClienteService(log);
     private VisualizarCliente visualizarCliente;
     
     
     public EditarCliente(VisualizarCliente parent) {
+        Log log = new Log(); 
+        this.clienteService = new ClienteService(log);
         initComponents();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

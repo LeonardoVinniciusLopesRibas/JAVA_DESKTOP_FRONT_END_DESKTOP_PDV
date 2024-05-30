@@ -3,14 +3,19 @@ package projeto.unipar.java_front_end_desktop_pdv.View;
 import javax.swing.JFrame;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class CadastrarCliente extends javax.swing.JFrame {
 
+    private Log log = new Log();
+    private final ClienteService clienteService;
     private Cliente cliente = new Cliente();
     private SetIcon setIcon = new SetIcon();
 
     public CadastrarCliente(JFrame parent) {
+        Log log = new Log(); 
+        this.clienteService = new ClienteService(log);
         initComponents();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -186,7 +191,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jbLimparCamposActionPerformed
 
     private void getDadosCampos(Cliente cliente) {
-        ClienteService clienteService = new ClienteService();
+        ClienteService clienteService = new ClienteService(log);
         clienteService.post(cliente, this);
 
     }

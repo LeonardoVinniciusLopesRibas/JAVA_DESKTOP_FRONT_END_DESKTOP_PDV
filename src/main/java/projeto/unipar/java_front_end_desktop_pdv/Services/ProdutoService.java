@@ -10,10 +10,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.View.CadastrarProduto;
 
@@ -29,7 +32,15 @@ public class ProdutoService {
     private static final String GETTUDO = "/get/tudo";
     private static final String PUT = "/put/";
 
+    private final Log log;
+
+    public ProdutoService(Log log) {
+        this.log = log;
+        startScheduledClientUpdate();
+    }
+    
     public void post(Produto produto, CadastrarProduto cadastrarProduto) {
+        String operacao = "PRODUTO INSERIDO";
         try {
             URL url = new URL(SECURITY + IP + DOIS_PONTOS + PORT + BASE_URL + POST);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -49,6 +60,7 @@ public class ProdutoService {
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
                 JOptionPane.showMessageDialog(null, "Produto salvo com sucesso!");
                 cadastrarProduto.limparCampos();
+                log.escreverLog(operacao, responseCode);
             } else {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 StringBuilder response = new StringBuilder();
@@ -81,6 +93,7 @@ public class ProdutoService {
     }
 
     public List<Produto> getProdutosFromAPI() {
+        String operacao = "PRODUTOS RECUPERADOS";
         try {
             URL url = new URL(SECURITY + IP + DOIS_PONTOS + PORT + BASE_URL + GETTUDO);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -89,7 +102,7 @@ public class ProdutoService {
             connection.setRequestProperty("Accept", "application/json");
 
             int responseCode = connection.getResponseCode();
-            JOptionPane.showMessageDialog(null, responseCode);
+            System.out.println(responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder response = new StringBuilder();
@@ -99,6 +112,7 @@ public class ProdutoService {
                 }
                 in.close();
                 String jsonResponse = response.toString();
+                log.escreverLog(operacao, responseCode);
                 return Produto.unmarshalFromJson(jsonResponse);
             } else {
                 JOptionPane.showMessageDialog(null, "Erro ao obter dados da API: " + responseCode);
@@ -112,7 +126,7 @@ public class ProdutoService {
     }
 
     public void put(Produto produto) {
-
+        String operacao = "PRODUTO ATUALIZADO";
         try{
             URL url = new URL(SECURITY+IP+DOIS_PONTOS+PORT+BASE_URL+PUT+produto.getId());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -130,6 +144,7 @@ public class ProdutoService {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso");
+                log.escreverLog(operacao, responseCode);
             }else{
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 StringBuilder response = new StringBuilder();
@@ -159,6 +174,11 @@ public class ProdutoService {
             
         }
 
+    }
+    
+    private void startScheduledClientUpdate() {
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+        executorService.scheduleAtFixedRate(() -> getProdutosFromAPI(), 0, 5, TimeUnit.MINUTES);
     }
 
    

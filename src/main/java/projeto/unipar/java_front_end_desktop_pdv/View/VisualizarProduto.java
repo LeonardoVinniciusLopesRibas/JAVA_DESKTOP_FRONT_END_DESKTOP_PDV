@@ -8,11 +8,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 
 public class VisualizarProduto extends javax.swing.JFrame {
 
+    private Log log = new Log();
     private Produto produto = new Produto();
-    private ProdutoService produtoService = new ProdutoService();
+    private ProdutoService produtoService = new ProdutoService(log);
     private DefaultTableModel model;
     private VisualizarProduto visualizarProduto;
 
@@ -45,6 +47,7 @@ public class VisualizarProduto extends javax.swing.JFrame {
 
                         EditarProduto editarProduto = new EditarProduto(VisualizarProduto.this);
                         editarProduto.setVisible(true);
+                        log.escreverLog("Tela de edição de produtos aberta", 200);
                         editarProduto.recebeDados(produto);
 
                     }

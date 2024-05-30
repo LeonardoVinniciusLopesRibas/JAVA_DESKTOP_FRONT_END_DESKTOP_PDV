@@ -5,10 +5,12 @@ import projeto.unipar.java_front_end_desktop_pdv.Util.NumberOnlyDocument;
 import javax.swing.JFrame;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class CadastrarProduto extends javax.swing.JFrame {
 
+    private Log log = new Log();
     private Produto produto = new Produto();
     private SetIcon setIcon = new SetIcon();
     
@@ -193,7 +195,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
 
     private void getDadosCampos(Produto produto){
         
-        ProdutoService produtoService = new ProdutoService();
+        ProdutoService produtoService = new ProdutoService(log);
         produtoService.post(produto, this);
     }
     

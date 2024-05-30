@@ -8,15 +8,18 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 
 public class VisualizarCliente extends javax.swing.JFrame {
 
+    private Log log = new Log();
     private Cliente cliente = new Cliente();
-    private ClienteService clienteService = new ClienteService();
+    private ClienteService clienteService = new ClienteService(log);
     private DefaultTableModel model;
     private VisualizarCliente visualizarCliente;
 
     public VisualizarCliente(JFrame parent) {
+        this.clienteService = new ClienteService(log);
         initComponents();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -97,7 +100,7 @@ public class VisualizarCliente extends javax.swing.JFrame {
 
     public void preencherTabela() {
 
-        List<Cliente> clientes = clienteService.getProdutosFromAPI();
+        List<Cliente> clientes = clienteService.getClientesFromAPI();
         model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         for (Cliente cliente : clientes) {
@@ -133,6 +136,7 @@ public class VisualizarCliente extends javax.swing.JFrame {
 
                         EditarCliente editarCliente = new EditarCliente(VisualizarCliente.this);
                         editarCliente.setVisible(true);
+                        log.escreverLog("Tela de edição de clientes aberta", 200);
                         editarCliente.recebeDados(cliente);
                     }
                 }

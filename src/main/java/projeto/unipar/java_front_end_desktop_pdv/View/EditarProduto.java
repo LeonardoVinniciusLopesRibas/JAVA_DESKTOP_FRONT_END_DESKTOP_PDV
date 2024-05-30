@@ -3,14 +3,16 @@ package projeto.unipar.java_front_end_desktop_pdv.View;
 import javax.swing.JFrame;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Util.NumberOnlyDocument;
 import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class EditarProduto extends javax.swing.JFrame {
 
+    private Log log = new Log();
     private SetIcon setIcon = new SetIcon();
     private Produto produto = new Produto();
-    private ProdutoService produtoService = new ProdutoService();
+    private ProdutoService produtoService = new ProdutoService(log);
     private VisualizarProduto visualizarProduto;
     
     public EditarProduto(VisualizarProduto parent) {
