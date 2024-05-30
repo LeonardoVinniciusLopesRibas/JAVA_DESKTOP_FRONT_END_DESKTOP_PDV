@@ -25,8 +25,12 @@ public class Retaguarda extends javax.swing.JFrame {
     private boolean isVisualizarClienteOpen;
     private VisualizarCliente visualizarClienteInstance;
     
+    private boolean isPdvOpen;
+    private Pdv pdvInstance;
+    
     public Retaguarda() {
         initComponents();
+        log.escreverLog("Aplicação iniciada", 200);
         isCadastrarProdutoOpen = false;
         isVisualizarProdutoOpen = false;
         cadastrarProdutoInstance = null;
@@ -61,6 +65,8 @@ public class Retaguarda extends javax.swing.JFrame {
                         cadastrarClienteInstance.dispose();
                     if(isVisualizarClienteOpen)
                         visualizarClienteInstance.dispose();
+                    if(isPdvOpen)
+                        pdvInstance.dispose();
                     log.escreverLog("Aplicação fechada com sucesso", 200);
                 } else {
                     Retaguarda.this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -161,6 +167,11 @@ public class Retaguarda extends javax.swing.JFrame {
         jmVenda.setText("Venda");
 
         jmiPdv.setText("PDV");
+        jmiPdv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiPdvActionPerformed(evt);
+            }
+        });
         jmVenda.add(jmiPdv);
 
         jMenuBar1.add(jmVenda);
@@ -291,6 +302,34 @@ public class Retaguarda extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmiVisualizarClienteActionPerformed
 
+    private void jmiPdvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiPdvActionPerformed
+        // TODO add your handling code here:
+        if(isPdvOpen){
+            pdvInstance.toFront();
+            pdvInstance.repaint();
+        }else{
+            isPdvOpen = true;
+            pdvInstance = new Pdv(this);
+            pdvInstance.setVisible(true);
+            log.escreverLog("Pdv aberto", 200);
+            pdvInstance.addWindowListener(new WindowAdapter(){
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    isPdvOpen = false;
+                    pdvInstance = null;
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    isPdvOpen = false;
+                    pdvInstance = null;
+                }
+                
+            });
+        }
+    }//GEN-LAST:event_jmiPdvActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -318,8 +357,6 @@ public class Retaguarda extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Retaguarda().setVisible(true);
-                Log log = new Log();
-                log.escreverLog("Aplicação iniciada", 200);
             }
         });
     }
