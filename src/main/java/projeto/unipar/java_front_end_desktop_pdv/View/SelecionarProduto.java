@@ -18,9 +18,11 @@ import projeto.unipar.java_front_end_desktop_pdv.Services.ItemVendaService;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class SelecionarProduto extends javax.swing.JFrame {
 
+    private SetIconJFrame setIcon = new SetIconJFrame();
     private Log log = new Log();
     private Produto produto = new Produto();
     private ProdutoService produtoService = new ProdutoService(log);
@@ -40,6 +42,7 @@ public class SelecionarProduto extends javax.swing.JFrame {
         addDoubleClickAction();
         addKeyboardNavigation();
         selecionarPrimeiraLinha(); 
+        setIcon.setIconJFrame(this);
         
     }
 

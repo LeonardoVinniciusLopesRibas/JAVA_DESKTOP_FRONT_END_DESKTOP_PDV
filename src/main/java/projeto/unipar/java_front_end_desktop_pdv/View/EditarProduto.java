@@ -5,9 +5,11 @@ import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Util.NumberOnlyDocument;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class EditarProduto extends javax.swing.JFrame {
 
+    private SetIconJFrame setIcon = new SetIconJFrame();
     private Log log = new Log();
     private Produto produto = new Produto();
     private ProdutoService produtoService = new ProdutoService(log);
@@ -19,6 +21,7 @@ public class EditarProduto extends javax.swing.JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         jtfValorProdutoEditar.setDocument(new NumberOnlyDocument());
         this.visualizarProduto = parent;
+        setIcon.setIconJFrame(this);
         
     }
 

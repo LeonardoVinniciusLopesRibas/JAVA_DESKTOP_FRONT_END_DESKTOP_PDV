@@ -13,9 +13,11 @@ import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class VisualizarProduto extends javax.swing.JFrame {
 
+    private SetIconJFrame setIcon = new SetIconJFrame();
     private Log log = new Log();
     private Produto produto = new Produto();
     private ProdutoService produtoService = new ProdutoService(log);
@@ -29,6 +31,7 @@ public class VisualizarProduto extends javax.swing.JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         preencherTabela();
         addDoubleClickAction();
+        setIcon.setIconJFrame(this);
         jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
     }
 

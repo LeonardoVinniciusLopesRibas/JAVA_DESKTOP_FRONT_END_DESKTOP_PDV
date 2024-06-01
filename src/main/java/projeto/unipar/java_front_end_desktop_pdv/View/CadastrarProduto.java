@@ -6,9 +6,11 @@ import javax.swing.JFrame;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class CadastrarProduto extends javax.swing.JFrame {
 
+    private SetIconJFrame setIcon = new SetIconJFrame();
     private Log log = new Log();
     private Produto produto = new Produto();
     
@@ -17,6 +19,7 @@ public class CadastrarProduto extends javax.swing.JFrame {
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         jtfValorProduto.setDocument(new NumberOnlyDocument());
+        setIcon.setIconJFrame(this);
     }
 
     @SuppressWarnings("unchecked")

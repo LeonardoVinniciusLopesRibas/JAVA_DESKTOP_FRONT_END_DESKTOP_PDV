@@ -3,9 +3,11 @@ package projeto.unipar.java_front_end_desktop_pdv.View;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class EditarCliente extends javax.swing.JFrame {
 
+    private SetIconJFrame setIcon = new SetIconJFrame();
     private Log log = new Log();
     private Cliente cliente = new Cliente();
     private ClienteService clienteService = new ClienteService(log);
@@ -19,6 +21,7 @@ public class EditarCliente extends javax.swing.JFrame {
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.visualizarCliente = parent;
+        setIcon.setIconJFrame(this);
     }
 
     @SuppressWarnings("unchecked")

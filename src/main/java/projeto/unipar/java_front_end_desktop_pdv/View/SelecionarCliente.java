@@ -14,9 +14,11 @@ import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class SelecionarCliente extends javax.swing.JFrame {
 
+    private SetIconJFrame setIcon = new SetIconJFrame();
     private int rowHeight = 40;
     private Log log = new Log();
     private ClienteService clienteService = new ClienteService(log);
@@ -34,6 +36,7 @@ public class SelecionarCliente extends javax.swing.JFrame {
         addDoubleClickAction();
         addKeyboardNavigation();
         selecionarPrimeiraLinha();
+        setIcon.setIconJFrame(this);
     }
 
     public void preencherTabela() {

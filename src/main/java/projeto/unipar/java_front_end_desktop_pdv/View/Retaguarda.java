@@ -1,6 +1,7 @@
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -8,11 +9,12 @@ import javax.swing.ImageIcon;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class Retaguarda extends javax.swing.JFrame {
 
     Log log = new Log();
-
+    private SetIconJFrame setIcon = new SetIconJFrame();
 
     private boolean isCadastrarProdutoOpen;
     private CadastrarProduto cadastrarProdutoInstance;
@@ -36,12 +38,16 @@ public class Retaguarda extends javax.swing.JFrame {
         isVisualizarProdutoOpen = false;
         cadastrarProdutoInstance = null;
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
-//        URL iconUrl = getClass().getResource("/META-INF/pdvIcon256px");
-//        ImageIcon icon = new ImageIcon(iconUrl);
-//        this.setIconImage(icon.getImage());
-        
-        
+        setIcon.setIconJFrame(this);
+
+//        URL iconUrl = getClass().getResource("/META-INF/pdvIcon256px.png");
+//        if (iconUrl != null) {
+//            ImageIcon icon = new ImageIcon(iconUrl);
+//            this.setIconImage(icon.getImage());
+//        } else {
+//            log.escreverLog("Icon URL is null", 500);
+//        }
+
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -97,6 +103,7 @@ public class Retaguarda extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PDV");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setIconImages(null);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
