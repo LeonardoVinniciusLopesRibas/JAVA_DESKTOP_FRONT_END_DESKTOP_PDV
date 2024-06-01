@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -14,13 +15,17 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import projeto.unipar.java_front_end_desktop_pdv.Dto.ItemVendaDtoResponse;
+import projeto.unipar.java_front_end_desktop_pdv.Dto.VendaDtoRequest;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
+import projeto.unipar.java_front_end_desktop_pdv.Services.VendaService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
+import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
 
 public class Pdv extends javax.swing.JFrame {
 
     Log log = new Log();
+    private SetIconJFrame setIcon = new SetIconJFrame();
 
     private int rowHeight = 40;
 
@@ -38,6 +43,7 @@ public class Pdv extends javax.swing.JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
         fecharTelaPdv();
+        setIcon.setIconJFrame(this);
 
         jTable1.addMouseListener(new MouseAdapter() {
             @Override
@@ -68,6 +74,8 @@ public class Pdv extends javax.swing.JFrame {
                 if (selectedRow != -1) {
                     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
                     model.removeRow(selectedRow);
+                    getValueTotal();
+                    updateRowCount();
 
                 }
             }
@@ -402,6 +410,8 @@ public class Pdv extends javax.swing.JFrame {
         int response = JOptionPane.showConfirmDialog(null, "Deseja realmente limpar a tabela de produtos?", "Confirmação", JOptionPane.YES_NO_OPTION);
         if (response == JOptionPane.YES_OPTION) {
             limparTabelaProdutos();
+            jtfQuantItens.setText("");
+            jtfValorTotal.setText("");
         }
     }//GEN-LAST:event_jbLimparTabelaProdutosActionPerformed
 
@@ -431,6 +441,8 @@ public class Pdv extends javax.swing.JFrame {
             itemVendaDtoResponse.getValor_total()
         };
         model.addRow(row);
+        getValueTotal();
+        updateRowCount();
     }
 
     private void fecharTelaPdv() {
@@ -482,6 +494,35 @@ public class Pdv extends javax.swing.JFrame {
     private void limparTabelaProdutos() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
+    }
+
+    public void getValueTotal() {
+        ArrayList<Object> valores = new ArrayList<>();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            valores.add(model.getValueAt(i, 4));
+        }
+
+        ArrayList<Double> valoresDouble = new ArrayList<>();
+        for (Object valor : valores) {
+            if (valor instanceof Number) {
+                valoresDouble.add(((Number) valor).doubleValue());
+            }
+        }
+
+        VendaDtoRequest vendaDtoRequest = new VendaDtoRequest();
+        vendaDtoRequest.setValorTotalVenda(valoresDouble);
+        VendaService vendaService = new VendaService(log);
+        Double valorTotal = vendaService.calcularValorTotal(vendaDtoRequest);
+
+        String valorTotalStr = String.valueOf(valorTotal);
+        jtfValorTotal.setText(valorTotalStr);
+    }
+
+    private void updateRowCount() {
+        int rowCount = jTable1.getRowCount();
+        jtfQuantItens.setText(String.valueOf(rowCount));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
