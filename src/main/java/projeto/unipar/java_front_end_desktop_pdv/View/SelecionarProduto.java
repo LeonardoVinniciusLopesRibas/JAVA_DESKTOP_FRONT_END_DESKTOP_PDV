@@ -4,62 +4,39 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import projeto.unipar.java_front_end_desktop_pdv.Dto.ItemVendaDtoRequest;
+import projeto.unipar.java_front_end_desktop_pdv.Dto.ItemVendaDtoResponse;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
+import projeto.unipar.java_front_end_desktop_pdv.Services.ItemVendaService;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 
-public class VisualizarProduto extends javax.swing.JFrame {
+public class SelecionarProduto extends javax.swing.JFrame {
 
     private Log log = new Log();
     private Produto produto = new Produto();
     private ProdutoService produtoService = new ProdutoService(log);
+    private ItemVendaService itemVendaService = new ItemVendaService(log);
+    private ItemVendaDtoRequest itemVendaDto = new ItemVendaDtoRequest();
     private DefaultTableModel model;
-    private VisualizarProduto visualizarProduto;
     private int rowHeight = 40;
+    private Pdv parent;
 
-    public VisualizarProduto(JFrame parent) {
+
+    public SelecionarProduto(Pdv parent) {
+        this.parent = parent;
         initComponents();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
         preencherTabela();
         addDoubleClickAction();
-        jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
-    }
-
-    private void addDoubleClickAction() {
-        jTable1.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    if (row != -1) {
-                        // Obtém os dados da linha selecionada
-                        Long id = (Long) model.getValueAt(row, 0);
-                        String descricao = (String) model.getValueAt(row, 1);
-                        double valor = (double) model.getValueAt(row, 2);
-                        String categoria = (String) model.getValueAt(row, 3);
-
-                        // Preenche o objeto produto
-                        produto.setId(id);
-                        produto.setDescricao(descricao);
-                        produto.setValor_unitario(valor);
-                        produto.setCategoria(categoria);
-
-                        EditarProduto editarProduto = new EditarProduto(VisualizarProduto.this);
-                        editarProduto.setVisible(true);
-                        log.escreverLog("Tela de edição de produtos aberta", 200);
-                        editarProduto.recebeDados(produto);
-
-                    }
-                }
-            }
-        });
     }
 
     @SuppressWarnings("unchecked")
@@ -71,20 +48,15 @@ public class VisualizarProduto extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("LISTAGEM DE PRODUTOS");
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setModalExclusionType(java.awt.Dialog.ModalExclusionType.TOOLKIT_EXCLUDE);
+        setTitle("SELECIONAR PRODUTO");
         setResizable(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
-                "ID", "Descrição", "Valor", "Categoria"
+                "ID", "Nome", "Valor Unit", "Categoria"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -95,7 +67,6 @@ public class VisualizarProduto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -105,23 +76,23 @@ public class VisualizarProduto extends javax.swing.JFrame {
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(43, 43, 43)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 668, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,10 +102,18 @@ public class VisualizarProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void preencherTabela() {
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    // End of variables declaration//GEN-END:variables
+
+    private void preencherTabela() {
+
         List<Produto> produtos = produtoService.getProdutosFromAPI();
         model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Limpa a tabela antes de preencher
+        model.setRowCount(0);
         for (Produto produto : produtos) {
             Object[] row = {
                 produto.getId(),
@@ -163,9 +142,53 @@ public class VisualizarProduto extends javax.swing.JFrame {
         }
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    // End of variables declaration//GEN-END:variables
+    private void addDoubleClickAction() {
+
+        jTable1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                    int row = target.getSelectedRow();
+                    if (row != -1) {
+
+                        Long id = (Long) model.getValueAt(row, 0);
+                        String descricao = (String) model.getValueAt(row, 1);
+                        //String quantidadeStr = JOptionPane.showInputDialog("Digite a quantidade do produto: ");
+                        String quantidadeStr = (String) JOptionPane.showInputDialog(null, "Digite a quantidade do produto:",
+                                "Quantidade", JOptionPane.PLAIN_MESSAGE, null, null, "1");
+
+                        double valor = (double) model.getValueAt(row, 2);
+
+                        double quantidade = Double.parseDouble(quantidadeStr);
+
+                        ItemVendaDtoRequest itemVendaDto = new ItemVendaDtoRequest();
+                        itemVendaDto.setId(id);
+                        itemVendaDto.setProduto(descricao);
+                        itemVendaDto.setQuantidade(quantidade);
+                        itemVendaDto.setPrecoUnitario(valor);
+                        
+                        Double valor_total = itemVendaService.calcular(itemVendaDto);
+                        
+                        ItemVendaDtoResponse itemVendaDtoResponse = new ItemVendaDtoResponse();
+                        itemVendaDtoResponse.setId(itemVendaDto.getId());
+                        itemVendaDtoResponse.setNome(itemVendaDto.getProduto());
+                        itemVendaDtoResponse.setQuantidade(itemVendaDto.getQuantidade());
+                        itemVendaDtoResponse.setValor(itemVendaDto.getPrecoUnitario());
+                        itemVendaDtoResponse.setValor_total(valor_total);
+                        
+                        parent.preencheTabelaVenda(itemVendaDtoResponse);
+                        
+                        dispose();
+                        
+                        
+                        //ItemVendaService itemVendaService = new ItemVendaService();
+                        
+                    }
+                }
+            }
+
+        });
+
+    }
 }

@@ -1,13 +1,17 @@
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 
 public class VisualizarCliente extends javax.swing.JFrame {
@@ -17,6 +21,7 @@ public class VisualizarCliente extends javax.swing.JFrame {
     private ClienteService clienteService = new ClienteService(log);
     private DefaultTableModel model;
     private VisualizarCliente visualizarCliente;
+    private int rowHeight = 40;
 
     public VisualizarCliente(JFrame parent) {
         this.clienteService = new ClienteService(log);
@@ -25,6 +30,7 @@ public class VisualizarCliente extends javax.swing.JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         preencherTabela();
         addDoubleClickAction();
+        jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
     }
 
     @SuppressWarnings("unchecked")
@@ -112,7 +118,7 @@ public class VisualizarCliente extends javax.swing.JFrame {
             };
             model.addRow(row);
         }
-
+        ajustarLarguraColunas();
     }
 
     private void addDoubleClickAction() {
@@ -145,5 +151,21 @@ public class VisualizarCliente extends javax.swing.JFrame {
 
         });
 
+    }
+
+    public void ajustarLarguraColunas() {
+        for (int col = 0; col < jTable1.getColumnCount(); col++) {
+            TableColumn tableColumn = jTable1.getColumnModel().getColumn(col);
+            int maxWidth = 0;
+
+            for (int row = 0; row < jTable1.getRowCount(); row++) {
+                TableCellRenderer cellRenderer = jTable1.getCellRenderer(row, col);
+                Component c = jTable1.prepareRenderer(cellRenderer, row, col);
+                int width = c.getPreferredSize().width + jTable1.getIntercellSpacing().width;
+                maxWidth = Math.max(maxWidth, width);
+            }
+
+            tableColumn.setPreferredWidth(maxWidth);
+        }
     }
 }
