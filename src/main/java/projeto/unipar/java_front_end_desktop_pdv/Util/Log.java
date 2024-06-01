@@ -11,7 +11,7 @@ import java.util.Date;
 public class Log {
     
     private static final String DIRETORIO = System.getProperty("user.home") + "/.pdvlog";
-    private static final String ARQUIVO = DIRETORIO + "/log.txt"; // Ajustado para incluir o diretório completo
+    private static final String ARQUIVO = DIRETORIO + "/log.txt";
     
     public Log(){
         criarArquivo();

@@ -4,14 +4,12 @@ import javax.swing.JFrame;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
-import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class CadastrarCliente extends javax.swing.JFrame {
 
     private Log log = new Log();
     private final ClienteService clienteService;
     private Cliente cliente = new Cliente();
-    private SetIcon setIcon = new SetIcon();
 
     public CadastrarCliente(JFrame parent) {
         Log log = new Log(); 
@@ -19,8 +17,6 @@ public class CadastrarCliente extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setIcon.setSalvarButton(jbSalvar);
-        setIcon.setIconLimparCampos(jbLimparCampos);
     }
 
     @SuppressWarnings("unchecked")
@@ -69,6 +65,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
 
         jbSalvar.setBackground(new java.awt.Color(0, 0, 0));
         jbSalvar.setForeground(new java.awt.Color(255, 255, 255));
+        jbSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/salvar32px.png"))); // NOI18N
         jbSalvar.setText("Salvar");
         jbSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,6 +75,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
 
         jbLimparCampos.setBackground(new java.awt.Color(0, 0, 0));
         jbLimparCampos.setForeground(new java.awt.Color(255, 255, 255));
+        jbLimparCampos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/limparCampos32px.png"))); // NOI18N
         jbLimparCampos.setText("Limpar Campos");
         jbLimparCampos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -172,7 +170,7 @@ public class CadastrarCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        // TODO add your handling code here:
+
         cliente.setNome(jtfNomeCliente.getText());
         cliente.setEmail(jtfEmailCliente.getText());
         cliente.setTelefone(jtfTelefoneCliente.getText());
@@ -181,7 +179,6 @@ public class CadastrarCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbLimparCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparCamposActionPerformed
-        // TODO add your handling code here:
         jtfNomeCliente.setText("");
         jtfTelefoneCliente.setText("");
         jtfEmailCliente.setText("");

@@ -1,10 +1,11 @@
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
 import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -22,7 +23,7 @@ public class SelecionarCliente extends javax.swing.JFrame {
     private DefaultTableModel model;
     private Cliente cliente = new Cliente();
     private Pdv pdv;
-    
+
     public SelecionarCliente(Pdv parent) {
         this.pdv = parent;
         initComponents();
@@ -31,13 +32,15 @@ public class SelecionarCliente extends javax.swing.JFrame {
         jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
         preencherTabela();
         addDoubleClickAction();
+        addKeyboardNavigation();
+        selecionarPrimeiraLinha();
     }
-    
-    public void preencherTabela(){
+
+    public void preencherTabela() {
         List<Cliente> clientes = clienteService.getClientesFromAPI();
         model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        for (Cliente cliente : clientes){
+        for (Cliente cliente : clientes) {
             Object[] row = {
                 cliente.getId(),
                 cliente.getNome(),
@@ -48,7 +51,7 @@ public class SelecionarCliente extends javax.swing.JFrame {
         }
         ajustarLarguraColunas();
     }
-    
+
     public void ajustarLarguraColunas() {
         for (int col = 0; col < jTable1.getColumnCount(); col++) {
             TableColumn tableColumn = jTable1.getColumnModel().getColumn(col);
@@ -64,32 +67,53 @@ public class SelecionarCliente extends javax.swing.JFrame {
             tableColumn.setPreferredWidth(maxWidth);
         }
     }
-    
-    private void addDoubleClickAction() {
-        jTable1.addMouseListener(new MouseAdapter(){
+
+    public void selecionarCliente() {
+
+        int row = jTable1.getSelectedRow();
+        if (row != -1) {
+            Long id = (Long) model.getValueAt(row, 0);
+            String nome = (String) model.getValueAt(row, 1);
+            String telefone = (String) model.getValueAt(row, 2);
+            String email = (String) model.getValueAt(row, 3);
+
+            cliente.setId(id);
+            cliente.setNome(nome);
+            cliente.setTelefone(telefone);
+            cliente.setEmail(email);
+
+            pdv.enviaDados(cliente);
+            dispose();
+
+        }
+
+    }
+
+    private void addKeyboardNavigation(){
+        jTable1.addKeyListener(new KeyAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2){
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    if(row != -1){
-                        Long id = (Long) model.getValueAt(row, 0);
-                        String nome = (String) model.getValueAt(row, 1);
-                        String telefone = (String) model.getValueAt(row, 2);
-                        String email = (String) model.getValueAt(row, 3);
-                        
-                        cliente.setId(id);
-                        cliente.setNome(nome);
-                        cliente.setTelefone(telefone);
-                        cliente.setEmail(email);
-                        
-                        pdv.enviaDados(cliente);
-                        dispose();
-                        
-                    }
+            public void keyPressed(KeyEvent e) {
+                int row = jTable1.getSelectedRow();
+                if(e.getKeyCode() == KeyEvent.VK_ENTER && row != -1){
+                    selecionarCliente();
                 }
             }
+        
             
+        
+        });
+    }
+
+    
+    private void addDoubleClickAction() {
+        jTable1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    selecionarCliente();
+                }
+            }
+
         });
     }
 
@@ -161,4 +185,13 @@ public class SelecionarCliente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
+
+    private void selecionarPrimeiraLinha() {
+
+        if(jTable1.getRowCount() > 0){
+            jTable1.setRowSelectionInterval(0, 0);
+            jTable1.requestFocus();
+        }
+
+    }
 }

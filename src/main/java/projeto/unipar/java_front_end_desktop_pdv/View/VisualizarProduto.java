@@ -39,13 +39,11 @@ public class VisualizarProduto extends javax.swing.JFrame {
                     JTable target = (JTable) e.getSource();
                     int row = target.getSelectedRow();
                     if (row != -1) {
-                        // Obtém os dados da linha selecionada
                         Long id = (Long) model.getValueAt(row, 0);
                         String descricao = (String) model.getValueAt(row, 1);
                         double valor = (double) model.getValueAt(row, 2);
                         String categoria = (String) model.getValueAt(row, 3);
 
-                        // Preenche o objeto produto
                         produto.setId(id);
                         produto.setDescricao(descricao);
                         produto.setValor_unitario(valor);
@@ -134,7 +132,7 @@ public class VisualizarProduto extends javax.swing.JFrame {
     public void preencherTabela() {
         List<Produto> produtos = produtoService.getProdutosFromAPI();
         model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Limpa a tabela antes de preencher
+        model.setRowCount(0);
         for (Produto produto : produtos) {
             Object[] row = {
                 produto.getId(),

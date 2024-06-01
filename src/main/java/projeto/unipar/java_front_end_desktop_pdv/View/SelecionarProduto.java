@@ -1,6 +1,8 @@
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
 import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -28,7 +30,6 @@ public class SelecionarProduto extends javax.swing.JFrame {
     private int rowHeight = 40;
     private Pdv parent;
 
-
     public SelecionarProduto(Pdv parent) {
         this.parent = parent;
         initComponents();
@@ -37,6 +38,9 @@ public class SelecionarProduto extends javax.swing.JFrame {
         jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
         preencherTabela();
         addDoubleClickAction();
+        addKeyboardNavigation();
+        selecionarPrimeiraLinha(); 
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -142,53 +146,73 @@ public class SelecionarProduto extends javax.swing.JFrame {
         }
     }
 
+    private void selecionarProduto() {
+
+        int row = jTable1.getSelectedRow();
+        if (row != -1) {
+
+            Long id = (Long) model.getValueAt(row, 0);
+            String descricao = (String) model.getValueAt(row, 1);
+            String quantidadeStr = (String) JOptionPane.showInputDialog(null, "Digite a quantidade do produto:",
+                    "Quantidade", JOptionPane.PLAIN_MESSAGE, null, null, "1");
+
+            double valor = (double) model.getValueAt(row, 2);
+
+            double quantidade = Double.parseDouble(quantidadeStr);
+
+            ItemVendaDtoRequest itemVendaDto = new ItemVendaDtoRequest();
+            itemVendaDto.setId(id);
+            itemVendaDto.setProduto(descricao);
+            itemVendaDto.setQuantidade(quantidade);
+            itemVendaDto.setPrecoUnitario(valor);
+
+            Double valor_total = itemVendaService.calcular(itemVendaDto);
+
+            ItemVendaDtoResponse itemVendaDtoResponse = new ItemVendaDtoResponse();
+            itemVendaDtoResponse.setId(itemVendaDto.getId());
+            itemVendaDtoResponse.setNome(itemVendaDto.getProduto());
+            itemVendaDtoResponse.setQuantidade(itemVendaDto.getQuantidade());
+            itemVendaDtoResponse.setValor(itemVendaDto.getPrecoUnitario());
+            itemVendaDtoResponse.setValor_total(valor_total);
+
+            parent.preencheTabelaVenda(itemVendaDtoResponse);
+
+            dispose();
+
+        }
+
+    }
+
+    private void addKeyboardNavigation() {
+        jTable1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int row = jTable1.getSelectedRow();
+                if (e.getKeyCode() == KeyEvent.VK_ENTER && row != -1) {
+                    selecionarProduto();
+                }
+            }
+        });
+    }
+
     private void addDoubleClickAction() {
 
         jTable1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    JTable target = (JTable) e.getSource();
-                    int row = target.getSelectedRow();
-                    if (row != -1) {
-
-                        Long id = (Long) model.getValueAt(row, 0);
-                        String descricao = (String) model.getValueAt(row, 1);
-                        //String quantidadeStr = JOptionPane.showInputDialog("Digite a quantidade do produto: ");
-                        String quantidadeStr = (String) JOptionPane.showInputDialog(null, "Digite a quantidade do produto:",
-                                "Quantidade", JOptionPane.PLAIN_MESSAGE, null, null, "1");
-
-                        double valor = (double) model.getValueAt(row, 2);
-
-                        double quantidade = Double.parseDouble(quantidadeStr);
-
-                        ItemVendaDtoRequest itemVendaDto = new ItemVendaDtoRequest();
-                        itemVendaDto.setId(id);
-                        itemVendaDto.setProduto(descricao);
-                        itemVendaDto.setQuantidade(quantidade);
-                        itemVendaDto.setPrecoUnitario(valor);
-                        
-                        Double valor_total = itemVendaService.calcular(itemVendaDto);
-                        
-                        ItemVendaDtoResponse itemVendaDtoResponse = new ItemVendaDtoResponse();
-                        itemVendaDtoResponse.setId(itemVendaDto.getId());
-                        itemVendaDtoResponse.setNome(itemVendaDto.getProduto());
-                        itemVendaDtoResponse.setQuantidade(itemVendaDto.getQuantidade());
-                        itemVendaDtoResponse.setValor(itemVendaDto.getPrecoUnitario());
-                        itemVendaDtoResponse.setValor_total(valor_total);
-                        
-                        parent.preencheTabelaVenda(itemVendaDtoResponse);
-                        
-                        dispose();
-                        
-                        
-                        //ItemVendaService itemVendaService = new ItemVendaService();
-                        
-                    }
+                    selecionarProduto();
                 }
             }
 
         });
 
+    }
+
+    private void selecionarPrimeiraLinha() {
+        if (jTable1.getRowCount() > 0) {
+            jTable1.setRowSelectionInterval(0, 0);
+            jTable1.requestFocus();
+        }
     }
 }

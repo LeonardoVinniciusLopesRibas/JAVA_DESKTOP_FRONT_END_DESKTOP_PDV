@@ -140,7 +140,7 @@ public class ClienteService {
             }
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                JOptionPane.showMessageDialog(null, "Produto atualizado com sucesso!");
+                JOptionPane.showMessageDialog(null, "Cliente atualizado com sucesso!");
                 log.escreverLog(operacao, responseCode);
             } else {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));

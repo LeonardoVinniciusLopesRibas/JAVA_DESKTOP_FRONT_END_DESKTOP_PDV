@@ -1,13 +1,10 @@
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -155,6 +152,8 @@ public class Pdv extends javax.swing.JFrame {
         jtfEmail.setBackground(new java.awt.Color(0, 0, 0));
         jtfEmail.setForeground(new java.awt.Color(255, 255, 255));
 
+        jbFinalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/salvar32px.png"))); // NOI18N
+        jbFinalizar.setMnemonic('F');
         jbFinalizar.setText("Finalizar");
         jbFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,14 +161,18 @@ public class Pdv extends javax.swing.JFrame {
             }
         });
 
-        jbAddCliente.setText("Adicionar Cliente");
+        jbAddCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/cliente32px.png"))); // NOI18N
+        jbAddCliente.setMnemonic('C');
+        jbAddCliente.setText("Add Cliente");
         jbAddCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbAddClienteActionPerformed(evt);
             }
         });
 
-        jbAddProduto.setText("Adicionar Produto");
+        jbAddProduto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/produtos32px.png"))); // NOI18N
+        jbAddProduto.setMnemonic('P');
+        jbAddProduto.setText("Add Produto");
         jbAddProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbAddProdutoActionPerformed(evt);
@@ -192,10 +195,9 @@ public class Pdv extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Valor Total ");
 
-        jbLimpaCliente.setBackground(new java.awt.Color(255, 0, 0));
         jbLimpaCliente.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jbLimpaCliente.setForeground(new java.awt.Color(255, 255, 255));
-        jbLimpaCliente.setText("L");
+        jbLimpaCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/lixeira32px.png"))); // NOI18N
         jbLimpaCliente.setToolTipText("Limpar cliente");
         jbLimpaCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,10 +205,9 @@ public class Pdv extends javax.swing.JFrame {
             }
         });
 
-        jbLimparTabelaProdutos.setBackground(new java.awt.Color(255, 0, 0));
         jbLimparTabelaProdutos.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jbLimparTabelaProdutos.setForeground(new java.awt.Color(255, 255, 255));
-        jbLimparTabelaProdutos.setText("L");
+        jbLimparTabelaProdutos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/lixeira32px.png"))); // NOI18N
         jbLimparTabelaProdutos.setToolTipText("Limpar Tabela de Produtos");
         jbLimparTabelaProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -250,7 +251,7 @@ public class Pdv extends javax.swing.JFrame {
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jbLimparTabelaProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbLimparTabelaProdutos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,7 +273,7 @@ public class Pdv extends javax.swing.JFrame {
                             .addComponent(jtfTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jtfNomeCliente))
                         .addGap(18, 18, 18)
-                        .addComponent(jbLimpaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jbLimpaCliente)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jDesktopPane1Layout.setVerticalGroup(
@@ -362,7 +363,6 @@ public class Pdv extends javax.swing.JFrame {
     }//GEN-LAST:event_jbAddProdutoActionPerformed
 
     private void jbAddClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAddClienteActionPerformed
-        // TODO add your handling code here:
         if (isSelecionarClienteOpen) {
             selecionarClienteInstance.toFront();
             selecionarClienteInstance.repaint();
@@ -389,17 +389,20 @@ public class Pdv extends javax.swing.JFrame {
     }//GEN-LAST:event_jbAddClienteActionPerformed
 
     private void jbFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFinalizarActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_jbFinalizarActionPerformed
 
     private void jbLimpaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimpaClienteActionPerformed
-        // TODO add your handling code here:
-        limparCamposCliente();
+        int response = JOptionPane.showConfirmDialog(null, "Deseja realmente limpar os campos do cliente?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            limparCamposCliente();
+        }
     }//GEN-LAST:event_jbLimpaClienteActionPerformed
 
     private void jbLimparTabelaProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparTabelaProdutosActionPerformed
-        // TODO add your handling code here:
-        limparTabelaProdutos();
+        int response = JOptionPane.showConfirmDialog(null, "Deseja realmente limpar a tabela de produtos?", "Confirmação", JOptionPane.YES_NO_OPTION);
+        if (response == JOptionPane.YES_OPTION) {
+            limparTabelaProdutos();
+        }
     }//GEN-LAST:event_jbLimparTabelaProdutosActionPerformed
 
     public void ajustarLarguraColunas() {
@@ -478,7 +481,7 @@ public class Pdv extends javax.swing.JFrame {
 
     private void limparTabelaProdutos() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Remove todas as linhas da tabela
+        model.setRowCount(0);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

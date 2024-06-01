@@ -3,12 +3,10 @@ package projeto.unipar.java_front_end_desktop_pdv.View;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
-import projeto.unipar.java_front_end_desktop_pdv.Util.SetIcon;
 
 public class EditarCliente extends javax.swing.JFrame {
 
     private Log log = new Log();
-    private SetIcon setIcon = new SetIcon();
     private Cliente cliente = new Cliente();
     private ClienteService clienteService = new ClienteService(log);
     private VisualizarCliente visualizarCliente;
@@ -21,7 +19,6 @@ public class EditarCliente extends javax.swing.JFrame {
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.visualizarCliente = parent;
-        setIcon.setSalvarButton(jbEditarProduto);
     }
 
     @SuppressWarnings("unchecked")
@@ -43,6 +40,7 @@ public class EditarCliente extends javax.swing.JFrame {
 
         jbEditarProduto.setBackground(new java.awt.Color(0, 0, 0));
         jbEditarProduto.setForeground(new java.awt.Color(255, 255, 255));
+        jbEditarProduto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/META-INF/salvar32px.png"))); // NOI18N
         jbEditarProduto.setText("Salvar Edição");
         jbEditarProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -154,7 +152,6 @@ public class EditarCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbEditarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEditarProdutoActionPerformed
-        // TODO add your handling code here:
         enviaDados();
         visualizarCliente.preencherTabela();
         this.dispose();
