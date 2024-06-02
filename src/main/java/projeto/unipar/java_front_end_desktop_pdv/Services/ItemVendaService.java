@@ -88,11 +88,12 @@ public class ItemVendaService {
                 os.write(input, 0, input.length);
             }
 
-            JOptionPane.showMessageDialog(null, itemVenda.toString());
+            System.out.println(itemVenda.toString());
             int responseCode = connection.getResponseCode();
-            
-            JOptionPane.showMessageDialog(null,"INSERINDO ITEM VENDA, CÓDIGO: " + responseCode);
+
+            System.out.println("INSERINDO ITEM VENDA, CÓDIGO: " + responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                JOptionPane.showMessageDialog(null, "ITEM VENDA INSERIDA COM SUCESSO");
                 log.escreverLog(operacao, responseCode);
             } else {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));

@@ -6,19 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class ItemVenda {
 
     private Long id;
-    private Venda venda;
-    private Produto produto;
+    private Long idVenda;
+    private Long idProduto;
     private double quantidade;
     private double preco_unitario;
     private double preco_total;

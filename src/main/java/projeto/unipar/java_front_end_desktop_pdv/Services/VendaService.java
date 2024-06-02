@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -21,7 +22,6 @@ import projeto.unipar.java_front_end_desktop_pdv.Model.Venda;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 
 public class VendaService {
-
 
     private static final String SECURITY = "http://";
     private static final String IP = "localhost";
@@ -80,7 +80,7 @@ public class VendaService {
 
     }
 
-    public void insert(Venda venda) {
+    public Venda insert(Venda venda) {
 
         String operacao = "VENDA SENDO INSERIDA";
         try {
@@ -98,13 +98,26 @@ public class VendaService {
                 os.write(input, 0, input.length);
             }
 
-            JOptionPane.showMessageDialog(null, venda.toString());
+            System.out.println(venda.toString());
             int responseCode = connection.getResponseCode();
-            
-            JOptionPane.showMessageDialog(null, "INSERINDO VENDA, VENDAAA, CÓDIGO:" +responseCode);
+
+            System.out.println("INSERINDO ITEM VENDA, CÓDIGO: " + responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                JOptionPane.showMessageDialog(null, "VENDA INSERIDA COM SUCESSO");
                 System.out.println("Venda salva");
                 log.escreverLog(operacao, responseCode);
+
+                try (InputStream is = connection.getInputStream(); InputStreamReader isr = new InputStreamReader(is); BufferedReader br = new BufferedReader(isr)) {
+
+                    StringBuilder response = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = br.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+
+                    Venda vendaRetornada = Venda.unmarshalFromJsonVenda(response.toString());
+                    return vendaRetornada;
+                }
             } else {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
                 StringBuilder response = new StringBuilder();
@@ -130,33 +143,34 @@ public class VendaService {
         } catch (Exception e) {
             System.out.println(e);
         }
+        return null;
     }
 
-    public Venda findById(Long idVenda){
+    public Venda findById(Long idVenda) {
 
         String operacao = "VENDA BY ID";
-        try{
+        try {
             URL url = new URL(SECURITY + IP + DOIS_PONTOS + PORT + BASE_URL_VENDA + GETID + idVenda);
-        
+
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            
+
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Accept", "application/json");
             int responseCode = connection.getResponseCode();
-            if(responseCode == HttpURLConnection.HTTP_OK){
+            if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder response = new StringBuilder();
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                    response.append(inputLine);
+                }
+                in.close();
+                String jsonResponse = response.toString();
+                log.escreverLog(operacao, responseCode);
+                return Venda.unmarshalFromJsonVenda(jsonResponse);
             }
-            in.close();
-            String jsonResponse = response.toString();
-            log.escreverLog(operacao, responseCode);
-            return Venda.unmarshalFromJsonVenda(jsonResponse);
-            }
-        }catch(IOException ioe){
-                return null;
+        } catch (IOException ioe) {
+            return null;
         }
         return null;
     }

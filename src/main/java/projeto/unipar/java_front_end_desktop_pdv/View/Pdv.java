@@ -431,44 +431,38 @@ public class Pdv extends javax.swing.JFrame {
         venda.setTotal(valor);
 
         VendaService vendaService = new VendaService(log);
-        vendaService.insert(venda);
 
-        limparCamposCliente();
-        limparTabelaProdutos();
-        getValueTotal();
-        updateRowCount();
-
-        inserirItemVenda(venda);
-
-
-    }//GEN-LAST:event_jbFinalizarActionPerformed
-
-    private void inserirItemVenda(Venda venda) {
+        Venda vendaRetornada = vendaService.insert(venda);
 
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
         for (int i = 0; i < model.getRowCount(); i++) {
 
-            VendaService vendaService = new VendaService(log);
+            /*
+                private Long id;
+                private Long idVenda;
+                private Long idProduto;
+                private double quantidade;
+                private double preco_unitario;
+                private double preco_total;
+             */
             ProdutoService produtoService = new ProdutoService(log);
             Produto produto = new Produto();
             ItemVenda itemVenda = new ItemVenda();
+            Long idVenda = vendaRetornada.getId();
 
-            Long idVenda = venda.getId();
-            Venda vendaBuscadaDoBancoDeDados = new Venda();
-            vendaBuscadaDoBancoDeDados = vendaService.findById(idVenda);
-
-            itemVenda.setVenda(vendaBuscadaDoBancoDeDados);
+            //VENDA
+            itemVenda.setIdVenda(idVenda);
 
             Long idProduto = null;
             Object idObject = model.getValueAt(i, 0);
             if (idObject instanceof Long) {
                 idProduto = (Long) idObject;
             }
-            produto = produtoService.getById(idProduto);
+            
 
             //PRODUTO
-            itemVenda.setProduto(produto);
+            itemVenda.setIdProduto(idProduto);
 
             Object valorDoubleObject = model.getValueAt(i, 3);
             double valorUnit = 0.0;
@@ -499,14 +493,15 @@ public class Pdv extends javax.swing.JFrame {
 
             ItemVendaService itemVendaService = new ItemVendaService(log);
             itemVendaService.insert(itemVenda);
-
-            limparCamposCliente();
-            limparTabelaProdutos();
-            getValueTotal();
-            updateRowCount();
         }
 
-    }
+        limparCamposCliente();
+        limparTabelaProdutos();
+        getValueTotal();
+        updateRowCount();
+
+
+    }//GEN-LAST:event_jbFinalizarActionPerformed
 
     private void jbLimpaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimpaClienteActionPerformed
         int response = JOptionPane.showConfirmDialog(null, "Deseja realmente limpar os campos do cliente?", "Confirmação", JOptionPane.YES_NO_OPTION);
