@@ -1,5 +1,6 @@
 package projeto.unipar.java_front_end_desktop_pdv.Services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.Dimension;
 import java.io.BufferedReader;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.View.CadastrarProduto;
@@ -31,6 +33,7 @@ public class ProdutoService {
     private static final String POST = "/post";
     private static final String GETTUDO = "/get/tudo";
     private static final String PUT = "/put/";
+    private static final String GETID = "/get/";
 
     private final Log log;
 
@@ -174,6 +177,33 @@ public class ProdutoService {
             
         }
 
+    }
+    
+    public Produto getById(Long id){
+        String operacao = "PRODUTO BY ID";
+        try{
+            URL url = new URL(SECURITY + IP + DOIS_PONTOS + PORT + BASE_URL + GETID + id);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+            int responseCode = connection.getResponseCode();
+            if(responseCode == HttpURLConnection.HTTP_OK){
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            String jsonResponse = response.toString();
+            log.escreverLog(operacao, responseCode);
+            return Produto.unmarshalFromJsonProduto(jsonResponse);
+            }
+        }catch(IOException ioe){
+            return null;
+        }
+        return null;
     }
     
     private void startScheduledClientUpdate() {

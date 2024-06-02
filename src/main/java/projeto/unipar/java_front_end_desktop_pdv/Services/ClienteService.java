@@ -31,6 +31,7 @@ public class ClienteService {
     private static final String POST = "/post";
     private static final String GETTUDO = "/get/tudo";
     private static final String PUT = "/put/";
+    private static final String GETID = "/get/";
 
     private final Log log;
 
@@ -120,6 +121,33 @@ public class ClienteService {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    public Cliente getById(Long id){
+        String operacao = "CLIENTE BY ID";
+        try{
+            URL url = new URL(SECURITY + IP + DOIS_PONTOS + PORT + BASE_URL + GETID + id);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Accept", "application/json");
+            int responseCode = connection.getResponseCode();
+            if(responseCode == HttpURLConnection.HTTP_OK){
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            String jsonResponse = response.toString();
+            log.escreverLog(operacao, responseCode);
+            return Cliente.unmarshalFromJsonCliente(jsonResponse);
+            }
+        }catch(IOException ioe){
+            return null;
+        }
+        return null;
     }
 
     public void put(Cliente cliente) {

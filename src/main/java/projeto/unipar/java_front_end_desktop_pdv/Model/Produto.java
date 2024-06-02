@@ -28,9 +28,16 @@ public class Produto {
         return produtoList;
     }
     
+    public static Produto unmarshalFromJsonProduto(String json) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json, Produto.class);
+    }
+    
     public static String marshalToJson(Produto produto) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(produto);
     }
+    
+    
 
 }

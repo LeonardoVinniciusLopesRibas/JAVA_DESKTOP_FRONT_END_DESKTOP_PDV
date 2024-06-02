@@ -26,6 +26,11 @@ public class Cliente {
         return clienteList;
     }
     
+    public static Cliente unmarshalFromJsonCliente(String json) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(json, Cliente.class);
+    }
+    
     public static String marshalToJson(Cliente cliente) throws JsonProcessingException{
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(cliente);

@@ -5,7 +5,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -17,6 +19,12 @@ import javax.swing.table.TableColumn;
 import projeto.unipar.java_front_end_desktop_pdv.Dto.ItemVendaDtoResponse;
 import projeto.unipar.java_front_end_desktop_pdv.Dto.VendaDtoRequest;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
+import projeto.unipar.java_front_end_desktop_pdv.Model.ItemVenda;
+import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
+import projeto.unipar.java_front_end_desktop_pdv.Model.Venda;
+import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
+import projeto.unipar.java_front_end_desktop_pdv.Services.ItemVendaService;
+import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
 import projeto.unipar.java_front_end_desktop_pdv.Services.VendaService;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
@@ -255,12 +263,12 @@ public class Pdv extends javax.swing.JFrame {
                         .addComponent(jbAddCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jbAddProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(882, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jbLimparTabelaProdutos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jtfQuantItens, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -397,7 +405,108 @@ public class Pdv extends javax.swing.JFrame {
     }//GEN-LAST:event_jbAddClienteActionPerformed
 
     private void jbFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFinalizarActionPerformed
+
+        // Instanciar a venda fora do loop
+        Venda venda = new Venda();
+        ClienteService clienteService = new ClienteService(log);
+        String idString = jtfId.getText();
+        Long id = Long.parseLong(idString);
+        Cliente cliente = clienteService.getById(id);
+
+        //CLIENTE
+        venda.setCliente(cliente);
+
+        //OBSERVACAO
+        venda.setObservacao("OBSERVAÇÃO PADRÃO");
+
+        Date date = new Date();
+        date.toInstant();
+
+        //DATA
+        venda.setData_venda(date);
+        String valorString = jtfValorTotal.getText();
+        double valor = Double.parseDouble(valorString);
+
+        //TOTAL
+        venda.setTotal(valor);
+
+        VendaService vendaService = new VendaService(log);
+        vendaService.insert(venda);
+
+        limparCamposCliente();
+        limparTabelaProdutos();
+        getValueTotal();
+        updateRowCount();
+
+        inserirItemVenda(venda);
+
+
     }//GEN-LAST:event_jbFinalizarActionPerformed
+
+    private void inserirItemVenda(Venda venda) {
+
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+
+            VendaService vendaService = new VendaService(log);
+            ProdutoService produtoService = new ProdutoService(log);
+            Produto produto = new Produto();
+            ItemVenda itemVenda = new ItemVenda();
+
+            Long idVenda = venda.getId();
+            Venda vendaBuscadaDoBancoDeDados = new Venda();
+            vendaBuscadaDoBancoDeDados = vendaService.findById(idVenda);
+
+            itemVenda.setVenda(vendaBuscadaDoBancoDeDados);
+
+            Long idProduto = null;
+            Object idObject = model.getValueAt(i, 0);
+            if (idObject instanceof Long) {
+                idProduto = (Long) idObject;
+            }
+            produto = produtoService.getById(idProduto);
+
+            //PRODUTO
+            itemVenda.setProduto(produto);
+
+            Object valorDoubleObject = model.getValueAt(i, 3);
+            double valorUnit = 0.0;
+            if (valorDoubleObject instanceof Double) {
+                valorUnit = (Double) valorDoubleObject;
+            }
+
+            //PRECO UNITARIO
+            itemVenda.setPreco_unitario(valorUnit);
+
+            Object quantObject = model.getValueAt(i, 2);
+            double quantidade = 0.0;
+            if (quantObject instanceof Double) {
+                quantidade = (Double) quantObject;
+            }
+
+            //QUANTIDADE
+            itemVenda.setQuantidade(quantidade);
+
+            Object precoTotalObject = model.getValueAt(i, 4);
+            double precoTotal = 0.0;
+            if (precoTotalObject instanceof Double) {
+                precoTotal = (Double) precoTotalObject;
+            }
+
+            //PRECO TOTAL
+            itemVenda.setPreco_total(precoTotal);
+
+            ItemVendaService itemVendaService = new ItemVendaService(log);
+            itemVendaService.insert(itemVenda);
+
+            limparCamposCliente();
+            limparTabelaProdutos();
+            getValueTotal();
+            updateRowCount();
+        }
+
+    }
 
     private void jbLimpaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimpaClienteActionPerformed
         int response = JOptionPane.showConfirmDialog(null, "Deseja realmente limpar os campos do cliente?", "Confirmação", JOptionPane.YES_NO_OPTION);
