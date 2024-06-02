@@ -13,9 +13,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import javax.swing.text.PlainDocument;
 import projeto.unipar.java_front_end_desktop_pdv.Dto.ItemVendaDtoResponse;
 import projeto.unipar.java_front_end_desktop_pdv.Dto.VendaDtoRequest;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Cliente;
@@ -88,6 +93,27 @@ public class Pdv extends javax.swing.JFrame {
                 }
             }
         });
+        
+        PlainDocument doc = (PlainDocument) jtaObservacao.getDocument();
+        
+        // Adiciona um DocumentFilter para limitar o número de caracteres
+        doc.setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                // Se a adição do texto não ultrapassar o limite de 255 caracteres, permite a inserção
+                if (fb.getDocument().getLength() + string.length() <= 255) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                // Se a substituição do texto não ultrapassar o limite de 255 caracteres, permite a substituição
+                if (fb.getDocument().getLength() + text.length() - length <= 255) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        });
 
     }
 
@@ -115,6 +141,9 @@ public class Pdv extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jbLimpaCliente = new javax.swing.JButton();
         jbLimparTabelaProdutos = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtaObservacao = new javax.swing.JTextArea();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PDV");
@@ -231,6 +260,14 @@ public class Pdv extends javax.swing.JFrame {
             }
         });
 
+        jtaObservacao.setColumns(20);
+        jtaObservacao.setLineWrap(true);
+        jtaObservacao.setRows(5);
+        jScrollPane2.setViewportView(jtaObservacao);
+
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Observações");
+
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jtfNomeCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jtfId, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -249,6 +286,8 @@ public class Pdv extends javax.swing.JFrame {
         jDesktopPane1.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jbLimpaCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jbLimparTabelaProdutos, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -265,18 +304,6 @@ public class Pdv extends javax.swing.JFrame {
                         .addComponent(jbAddProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbLimparTabelaProdutos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jtfQuantItens, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel6))
-                            .addComponent(jtfValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(86, 86, 86))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
@@ -290,26 +317,42 @@ public class Pdv extends javax.swing.JFrame {
                             .addComponent(jtfNomeCliente))
                         .addGap(18, 18, 18)
                         .addComponent(jbLimpaCliente)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbLimparTabelaProdutos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jScrollPane2)
+                                .addComponent(jtfQuantItens, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addComponent(jtfValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                                .addComponent(jLabel7))
+                            .addComponent(jLabel8))
+                        .addGap(86, 86, 86))))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(20, 20, 20)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addComponent(jtfQuantItens, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtfValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbLimparTabelaProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jtfValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel8)
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jbLimparTabelaProdutos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 461, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
@@ -406,99 +449,16 @@ public class Pdv extends javax.swing.JFrame {
 
     private void jbFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFinalizarActionPerformed
 
-        // Instanciar a venda fora do loop
-        Venda venda = new Venda();
-        ClienteService clienteService = new ClienteService(log);
-        String idString = jtfId.getText();
-        Long id = Long.parseLong(idString);
-        Cliente cliente = clienteService.getById(id);
-
-        //CLIENTE
-        venda.setCliente(cliente);
-
-        //OBSERVACAO
-        venda.setObservacao("OBSERVAÇÃO PADRÃO");
-
-        Date date = new Date();
-        date.toInstant();
-
-        //DATA
-        venda.setData_venda(date);
-        String valorString = jtfValorTotal.getText();
-        double valor = Double.parseDouble(valorString);
-
-        //TOTAL
-        venda.setTotal(valor);
-
-        VendaService vendaService = new VendaService(log);
-
-        Venda vendaRetornada = vendaService.insert(venda);
-
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-
-        for (int i = 0; i < model.getRowCount(); i++) {
-
-            /*
-                private Long id;
-                private Long idVenda;
-                private Long idProduto;
-                private double quantidade;
-                private double preco_unitario;
-                private double preco_total;
-             */
-            ProdutoService produtoService = new ProdutoService(log);
-            Produto produto = new Produto();
-            ItemVenda itemVenda = new ItemVenda();
-            Long idVenda = vendaRetornada.getId();
-
-            //VENDA
-            itemVenda.setIdVenda(idVenda);
-
-            Long idProduto = null;
-            Object idObject = model.getValueAt(i, 0);
-            if (idObject instanceof Long) {
-                idProduto = (Long) idObject;
+        new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+                finalizarVenda();
+                this.toBack();
+                
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
-            
-
-            //PRODUTO
-            itemVenda.setIdProduto(idProduto);
-
-            Object valorDoubleObject = model.getValueAt(i, 3);
-            double valorUnit = 0.0;
-            if (valorDoubleObject instanceof Double) {
-                valorUnit = (Double) valorDoubleObject;
-            }
-
-            //PRECO UNITARIO
-            itemVenda.setPreco_unitario(valorUnit);
-
-            Object quantObject = model.getValueAt(i, 2);
-            double quantidade = 0.0;
-            if (quantObject instanceof Double) {
-                quantidade = (Double) quantObject;
-            }
-
-            //QUANTIDADE
-            itemVenda.setQuantidade(quantidade);
-
-            Object precoTotalObject = model.getValueAt(i, 4);
-            double precoTotal = 0.0;
-            if (precoTotalObject instanceof Double) {
-                precoTotal = (Double) precoTotalObject;
-            }
-
-            //PRECO TOTAL
-            itemVenda.setPreco_total(precoTotal);
-
-            ItemVendaService itemVendaService = new ItemVendaService(log);
-            itemVendaService.insert(itemVenda);
-        }
-
-        limparCamposCliente();
-        limparTabelaProdutos();
-        getValueTotal();
-        updateRowCount();
+        }).start();
 
 
     }//GEN-LAST:event_jbFinalizarActionPerformed
@@ -594,6 +554,10 @@ public class Pdv extends javax.swing.JFrame {
         jtfTelefone.setText("");
         jtfEmail.setText("");
     }
+    
+    private void limparObservacao(){
+        jtaObservacao.setText("");
+    }
 
     private void limparTabelaProdutos() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -629,6 +593,117 @@ public class Pdv extends javax.swing.JFrame {
         jtfQuantItens.setText(String.valueOf(rowCount));
     }
 
+    private void finalizarVenda() {
+
+        // Instanciar a venda fora do loop
+        Venda venda = new Venda();
+        ClienteService clienteService = new ClienteService(log);
+        String idString = jtfId.getText();
+        Long id = Long.parseLong(idString);
+        Cliente cliente = clienteService.getById(id);
+
+        // CLIENTE
+        venda.setCliente(cliente);
+
+        String observacao = jtaObservacao.getText();
+        // OBSERVACAO
+        venda.setObservacao(observacao);
+
+        Date date = new Date();
+        date.toInstant();
+
+        // DATA
+        venda.setData_venda(date);
+        String valorString = jtfValorTotal.getText();
+        double valor = Double.parseDouble(valorString);
+
+        // TOTAL
+        venda.setTotal(valor);
+
+        VendaService vendaService = new VendaService(log);
+
+        // Executar a operação de salvar a venda de forma assíncrona
+        new SwingWorker<Venda, Void>() {
+            @Override
+            protected Venda doInBackground() throws Exception {
+                // Inserir a venda
+                Venda vendaRetornada = vendaService.insert(venda);
+
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    ProdutoService produtoService = new ProdutoService(log);
+                    Produto produto = new Produto();
+                    ItemVenda itemVenda = new ItemVenda();
+                    Long idVenda = vendaRetornada.getId();
+
+                    // VENDA
+                    itemVenda.setIdVenda(idVenda);
+
+                    Long idProduto = null;
+                    Object idObject = model.getValueAt(i, 0);
+                    if (idObject instanceof Long) {
+                        idProduto = (Long) idObject;
+                    }
+
+                    // PRODUTO
+                    itemVenda.setIdProduto(idProduto);
+
+                    Object valorDoubleObject = model.getValueAt(i, 3);
+                    double valorUnit = 0.0;
+                    if (valorDoubleObject instanceof Double) {
+                        valorUnit = (Double) valorDoubleObject;
+                    }
+
+                    // PRECO UNITARIO
+                    itemVenda.setPreco_unitario(valorUnit);
+
+                    Object quantObject = model.getValueAt(i, 2);
+                    double quantidade = 0.0;
+                    if (quantObject instanceof Double) {
+                        quantidade = (Double) quantObject;
+                    }
+
+                    // QUANTIDADE
+                    itemVenda.setQuantidade(quantidade);
+
+                    Object precoTotalObject = model.getValueAt(i, 4);
+                    double precoTotal = 0.0;
+                    if (precoTotalObject instanceof Double) {
+                        precoTotal = (Double) precoTotalObject;
+                    }
+
+                    // PRECO TOTAL
+                    itemVenda.setPreco_total(precoTotal);
+
+                    ItemVendaService itemVendaService = new ItemVendaService(log);
+                    itemVendaService.insert(itemVenda);
+                }
+
+                return vendaRetornada;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    Venda vendaRetornada = get();
+                    if (vendaRetornada != null) {
+                        JOptionPane.showMessageDialog(null, "VENDA INSERIDA COM SUCESSO");
+                    }
+                    limparCamposCliente();
+                    limparTabelaProdutos();
+                    limparObservacao();
+                    getValueTotal();
+                    updateRowCount();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Erro ao inserir venda: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }.execute();
+        this.toFront();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel2;
@@ -637,13 +712,16 @@ public class Pdv extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JButton jbAddCliente;
     private javax.swing.JButton jbAddProduto;
     private javax.swing.JButton jbFinalizar;
     private javax.swing.JButton jbLimpaCliente;
     private javax.swing.JButton jbLimparTabelaProdutos;
+    private javax.swing.JTextArea jtaObservacao;
     private javax.swing.JTextField jtfEmail;
     private javax.swing.JTextField jtfId;
     private javax.swing.JTextField jtfNomeCliente;
@@ -653,3 +731,65 @@ public class Pdv extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 }
+
+
+
+/*
+
+public static void main(String[] args) {
+        lerArquivoAssincrono("arquivo.txt");
+        System.out.println("Fim do método main.");
+
+    }
+
+    private static void lerArquivoAssincrono(String nomeArquivo) {
+        System.out.println("Iniciando a leitura do arquivo " + nomeArquivo);
+        new Thread(() -> {
+            try {
+                Thread.sleep(5000); //simulando uma leitura demorada
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Leitura concluída com sucesso.");
+        }, "Leitura").start();
+        System.out.println("Leitura em andamento...");
+    }
+
+    main para GET
+    public static void main(String[] args) {
+        System.out.println("Iniciando a aplicação...");
+
+        // Lista de CEPs utilizadas na aplicação
+        List<Cep> cepList = new ArrayList<>();
+
+        // Inicia o updater
+        CepUpdater cepUpdater = new CepUpdater();
+        CompletableFuture<List<Cep>> future = cepUpdater.startUpdating();
+
+        // Adiciona um listener para quando a atualização terminar
+        future.thenAccept(ret -> {
+            cepList.clear(); // Limpa a lista atual
+            cepList.addAll(ret); // Adiciona os novos CEPs
+            System.out.println("CEPs atualizados");
+
+            // Imprime os CEPs atualizados
+            for (Cep cep : cepList) {
+                System.out.println(cep.toString());
+            }
+        });
+
+        // Imprime os CEPs atuais (ocorre antes da atualização)
+        System.out.println("Ceps atuais");
+        for (Cep cep : cepList) {
+            System.out.println(cep.toString());
+        }
+
+        // Aguarda 10 segundos para fechar o updating,
+        // Caso a aplicação termine antes de realizar o update, nunca vai atualizar a lista.
+        cepUpdater.stopUpdating(10);
+        System.out.println("Fim da aplicação.");
+
+    }
+
+
+*/

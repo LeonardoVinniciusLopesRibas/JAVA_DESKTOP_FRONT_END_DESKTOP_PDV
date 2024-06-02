@@ -101,9 +101,9 @@ public class VendaService {
             System.out.println(venda.toString());
             int responseCode = connection.getResponseCode();
 
-            System.out.println("INSERINDO ITEM VENDA, CÓDIGO: " + responseCode);
+            //System.out.println("INSERINDO ITEM VENDA, CÓDIGO: " + responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
-                JOptionPane.showMessageDialog(null, "VENDA INSERIDA COM SUCESSO");
+                //JOptionPane.showMessageDialog(null, "VENDA INSERIDA COM SUCESSO");
                 System.out.println("Venda salva");
                 log.escreverLog(operacao, responseCode);
 

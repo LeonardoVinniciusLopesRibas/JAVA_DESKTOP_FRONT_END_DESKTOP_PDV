@@ -1,11 +1,7 @@
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.URL;
-import javax.swing.ImageIcon;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
