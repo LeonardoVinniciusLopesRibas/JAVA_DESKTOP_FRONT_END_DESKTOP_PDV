@@ -62,6 +62,28 @@ public class ItemVendaService {
                 }
                 in.close();
                 valorTotal = Double.parseDouble(response.toString());
+            }else{
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                StringBuilder response = new StringBuilder();
+                String inputLine;
+                while((inputLine = in.readLine()) != null){
+                    response.append(inputLine);
+                }
+                in.close();
+                
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> errorResponse = mapper.readValue(response.toString(), Map.class);
+                List<String> errorList = (List<String>) errorResponse.get("errorList");
+                StringBuilder formattedErrors = new StringBuilder();
+                for (String error : errorList) {
+                    formattedErrors.append(error).append("\n");
+                }
+                
+                JTextArea textArea = new JTextArea(formattedErrors.toString());
+                textArea.setEditable(false);
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                scrollPane.setPreferredSize(new Dimension(400, 200));
+                JOptionPane.showMessageDialog(null, scrollPane, "Erro de inserção", JOptionPane.ERROR_MESSAGE);
             }
             connection.disconnect();
         } catch (Exception e) {
