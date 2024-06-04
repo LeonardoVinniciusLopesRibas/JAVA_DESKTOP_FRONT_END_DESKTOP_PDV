@@ -43,6 +43,7 @@ public class VisualizarCliente extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,10 +66,15 @@ public class VisualizarCliente extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setToolTipText("");
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Dê dois cliques para editar um cliente");
+
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -78,11 +84,17 @@ public class VisualizarCliente extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addGap(270, 270, 270)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
+                .addGap(17, 17, 17)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(89, Short.MAX_VALUE))
         );
@@ -103,6 +115,7 @@ public class VisualizarCliente extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

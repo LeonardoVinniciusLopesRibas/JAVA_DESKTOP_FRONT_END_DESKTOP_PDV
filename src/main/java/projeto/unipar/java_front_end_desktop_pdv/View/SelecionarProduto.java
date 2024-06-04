@@ -168,12 +168,13 @@ public class SelecionarProduto extends javax.swing.JFrame {
             itemVendaDto.setProduto(descricao);
             itemVendaDto.setQuantidade(quantidade);
             itemVendaDto.setPrecoUnitario(valor);
-
+            
             Double valor_total = itemVendaService.calcular(itemVendaDto);
 
             ItemVendaDtoResponse itemVendaDtoResponse = new ItemVendaDtoResponse();
             itemVendaDtoResponse.setId(itemVendaDto.getId());
             itemVendaDtoResponse.setNome(itemVendaDto.getProduto());
+            
             itemVendaDtoResponse.setQuantidade(itemVendaDto.getQuantidade());
             itemVendaDtoResponse.setValor(itemVendaDto.getPrecoUnitario());
             itemVendaDtoResponse.setValor_total(valor_total);

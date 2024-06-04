@@ -89,13 +89,13 @@ public class Pdv extends javax.swing.JFrame {
                     model.removeRow(selectedRow);
                     getValueTotal();
                     updateRowCount();
-
+                    updateFinalizarButtonState();
                 }
             }
         });
-        
+
         PlainDocument doc = (PlainDocument) jtaObservacao.getDocument();
-        
+
         // Adiciona um DocumentFilter para limitar o número de caracteres
         doc.setDocumentFilter(new DocumentFilter() {
             @Override
@@ -114,6 +114,7 @@ public class Pdv extends javax.swing.JFrame {
                 }
             }
         });
+        updateFinalizarButtonState(); 
 
     }
 
@@ -166,6 +167,7 @@ public class Pdv extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setToolTipText("Clique com botão direito do mouse para deletar um produto");
         jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
 
@@ -451,10 +453,13 @@ public class Pdv extends javax.swing.JFrame {
 
         new Thread(() -> {
             try {
+                jbFinalizar.setEnabled(false);
+                this.toBack();
                 Thread.sleep(5000);
                 finalizarVenda();
-                this.toBack();
-                
+                this.toFront();
+                this.repaint();
+
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -497,16 +502,21 @@ public class Pdv extends javax.swing.JFrame {
 
     public void preencheTabelaVenda(ItemVendaDtoResponse itemVendaDtoResponse) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        Object[] row = {
-            itemVendaDtoResponse.getId(),
-            itemVendaDtoResponse.getNome(),
-            itemVendaDtoResponse.getQuantidade(),
-            itemVendaDtoResponse.getValor(),
-            itemVendaDtoResponse.getValor_total()
-        };
-        model.addRow(row);
+        if (itemVendaDtoResponse.getQuantidade() <= 0.0) {
+
+        } else {
+            Object[] row = {
+                itemVendaDtoResponse.getId(),
+                itemVendaDtoResponse.getNome(),
+                itemVendaDtoResponse.getQuantidade(),
+                itemVendaDtoResponse.getValor(),
+                itemVendaDtoResponse.getValor_total()
+            };
+            model.addRow(row);
+        }
         getValueTotal();
         updateRowCount();
+        updateFinalizarButtonState(); 
     }
 
     private void fecharTelaPdv() {
@@ -546,6 +556,7 @@ public class Pdv extends javax.swing.JFrame {
         jtfNomeCliente.setText(cliente.getNome());
         jtfTelefone.setText(cliente.getTelefone());
         jtfEmail.setText(cliente.getEmail());
+        updateFinalizarButtonState(); 
     }
 
     private void limparCamposCliente() {
@@ -553,15 +564,17 @@ public class Pdv extends javax.swing.JFrame {
         jtfNomeCliente.setText("");
         jtfTelefone.setText("");
         jtfEmail.setText("");
+        updateFinalizarButtonState(); 
     }
-    
-    private void limparObservacao(){
+
+    private void limparObservacao() {
         jtaObservacao.setText("");
     }
 
     private void limparTabelaProdutos() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
+        updateFinalizarButtonState(); 
     }
 
     public void getValueTotal() {
@@ -595,6 +608,7 @@ public class Pdv extends javax.swing.JFrame {
 
     private void finalizarVenda() {
 
+        jbFinalizar.setEnabled(false);
         // Instanciar a venda fora do loop
         Venda venda = new Venda();
         ClienteService clienteService = new ClienteService(log);
@@ -689,6 +703,7 @@ public class Pdv extends javax.swing.JFrame {
                     Venda vendaRetornada = get();
                     if (vendaRetornada != null) {
                         JOptionPane.showMessageDialog(null, "VENDA INSERIDA COM SUCESSO");
+                        jbFinalizar.setEnabled(true);
                     }
                     limparCamposCliente();
                     limparTabelaProdutos();
@@ -698,11 +713,21 @@ public class Pdv extends javax.swing.JFrame {
                 } catch (Exception e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Erro ao inserir venda: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                    jbFinalizar.setEnabled(true);
+                }finally{
+                    updateFinalizarButtonState(); 
                 }
             }
         }.execute();
-        this.toFront();
+        jbFinalizar.setEnabled(true);
     }
+
+    private void updateFinalizarButtonState() {
+        boolean hasProducts = jTable1.getRowCount() > 0;
+        boolean hasClient = !jtfId.getText().trim().isEmpty();
+        jbFinalizar.setEnabled(hasProducts && hasClient);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
@@ -731,65 +756,3 @@ public class Pdv extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 }
-
-
-
-/*
-
-public static void main(String[] args) {
-        lerArquivoAssincrono("arquivo.txt");
-        System.out.println("Fim do método main.");
-
-    }
-
-    private static void lerArquivoAssincrono(String nomeArquivo) {
-        System.out.println("Iniciando a leitura do arquivo " + nomeArquivo);
-        new Thread(() -> {
-            try {
-                Thread.sleep(5000); //simulando uma leitura demorada
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Leitura concluída com sucesso.");
-        }, "Leitura").start();
-        System.out.println("Leitura em andamento...");
-    }
-
-    main para GET
-    public static void main(String[] args) {
-        System.out.println("Iniciando a aplicação...");
-
-        // Lista de CEPs utilizadas na aplicação
-        List<Cep> cepList = new ArrayList<>();
-
-        // Inicia o updater
-        CepUpdater cepUpdater = new CepUpdater();
-        CompletableFuture<List<Cep>> future = cepUpdater.startUpdating();
-
-        // Adiciona um listener para quando a atualização terminar
-        future.thenAccept(ret -> {
-            cepList.clear(); // Limpa a lista atual
-            cepList.addAll(ret); // Adiciona os novos CEPs
-            System.out.println("CEPs atualizados");
-
-            // Imprime os CEPs atualizados
-            for (Cep cep : cepList) {
-                System.out.println(cep.toString());
-            }
-        });
-
-        // Imprime os CEPs atuais (ocorre antes da atualização)
-        System.out.println("Ceps atuais");
-        for (Cep cep : cepList) {
-            System.out.println(cep.toString());
-        }
-
-        // Aguarda 10 segundos para fechar o updating,
-        // Caso a aplicação termine antes de realizar o update, nunca vai atualizar a lista.
-        cepUpdater.stopUpdating(10);
-        System.out.println("Fim da aplicação.");
-
-    }
-
-
-*/
