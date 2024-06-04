@@ -1,4 +1,5 @@
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$3.class
+projeto\unipar\java_front_end_desktop_pdv\View\EditarCliente$2.class
 projeto\unipar\java_front_end_desktop_pdv\View\SelecionarCliente$1.class
 projeto\unipar\java_front_end_desktop_pdv\View\CadastrarCliente$1.class
 projeto\unipar\java_front_end_desktop_pdv\Util\SetIconJFrame.class
@@ -35,6 +36,7 @@ projeto\unipar\java_front_end_desktop_pdv\View\VisualizarCliente$2.class
 projeto\unipar\java_front_end_desktop_pdv\Util\CustomRowHeight.class
 projeto\unipar\java_front_end_desktop_pdv\View\Pdv$9.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$8.class
+projeto\unipar\java_front_end_desktop_pdv\View\CadastrarCliente$3.class
 projeto\unipar\java_front_end_desktop_pdv\View\EditarCliente.class
 projeto\unipar\java_front_end_desktop_pdv\Dto\ItemVendaDtoRequest.class
 projeto\unipar\java_front_end_desktop_pdv\Services\ProdutoService.class
@@ -49,11 +51,13 @@ projeto\unipar\java_front_end_desktop_pdv\View\SelecionarCliente$2.class
 projeto\unipar\java_front_end_desktop_pdv\View\CadastrarProduto$1.class
 projeto\unipar\java_front_end_desktop_pdv\View\Pdv$6.class
 projeto\unipar\java_front_end_desktop_pdv\View\VisualizarProduto$2.class
+projeto\unipar\java_front_end_desktop_pdv\View\EditarCliente$3.class
 projeto\unipar\java_front_end_desktop_pdv\Model\Produto.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$10.class
 projeto\unipar\java_front_end_desktop_pdv\Model\Cliente.class
 projeto\unipar\java_front_end_desktop_pdv\View\Pdv$8.class
 projeto\unipar\java_front_end_desktop_pdv\Services\ItemVendaService.class
+projeto\unipar\java_front_end_desktop_pdv\View\CadastrarCliente$4.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$7.class
 projeto\unipar\java_front_end_desktop_pdv\Dto\ItemVendaDtoRequest$1.class
 projeto\unipar\java_front_end_desktop_pdv\View\Pdv$10.class
