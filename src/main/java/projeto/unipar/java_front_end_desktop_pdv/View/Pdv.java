@@ -466,9 +466,9 @@ public class Pdv extends javax.swing.JFrame {
                 finalizarVenda();
                 this.dispose();
                 
-                //limpaParaNovaVenda();
-                this.toFront();
-                this.repaint();
+                
+                //this.toFront();
+                //this.repaint();
 
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
@@ -769,5 +769,7 @@ public class Pdv extends javax.swing.JFrame {
     private javax.swing.JTextField jtfTelefone;
     private javax.swing.JTextField jtfValorTotal;
     // End of variables declaration//GEN-END:variables
+
+    
 
 }
