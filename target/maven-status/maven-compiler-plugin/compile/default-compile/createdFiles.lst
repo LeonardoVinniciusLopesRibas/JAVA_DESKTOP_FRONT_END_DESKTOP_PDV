@@ -27,7 +27,6 @@ projeto\unipar\java_front_end_desktop_pdv\View\CadastrarProduto$2.class
 projeto\unipar\java_front_end_desktop_pdv\Dto\ItemVendaDtoResponse.class
 projeto\unipar\java_front_end_desktop_pdv\Util\NumberOnlyDocument.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$11.class
-projeto\unipar\java_front_end_desktop_pdv\Util\JsonUtil.class
 projeto\unipar\java_front_end_desktop_pdv\View\EditarProduto$1.class
 projeto\unipar\java_front_end_desktop_pdv\View\Pdv$12.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$9.class
@@ -37,6 +36,7 @@ projeto\unipar\java_front_end_desktop_pdv\Util\CustomRowHeight.class
 projeto\unipar\java_front_end_desktop_pdv\View\Pdv$9.class
 projeto\unipar\java_front_end_desktop_pdv\View\Retaguarda$8.class
 projeto\unipar\java_front_end_desktop_pdv\View\CadastrarCliente$3.class
+projeto\unipar\java_front_end_desktop_pdv\Util\CurrencyRenderer.class
 projeto\unipar\java_front_end_desktop_pdv\View\EditarCliente.class
 projeto\unipar\java_front_end_desktop_pdv\Dto\ItemVendaDtoRequest.class
 projeto\unipar\java_front_end_desktop_pdv\Services\ProdutoService.class

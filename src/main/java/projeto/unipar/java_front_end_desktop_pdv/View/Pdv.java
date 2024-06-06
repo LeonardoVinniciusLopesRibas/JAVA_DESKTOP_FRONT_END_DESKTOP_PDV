@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,7 @@ import projeto.unipar.java_front_end_desktop_pdv.Services.ClienteService;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ItemVendaService;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
 import projeto.unipar.java_front_end_desktop_pdv.Services.VendaService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.CurrencyRenderer;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
@@ -114,7 +116,10 @@ public class Pdv extends javax.swing.JFrame {
                 }
             }
         });
-        updateFinalizarButtonState(); 
+        updateFinalizarButtonState();
+        jTable1.getColumnModel().getColumn(2).setCellRenderer(new CurrencyRenderer());
+        jTable1.getColumnModel().getColumn(3).setCellRenderer(new CurrencyRenderer());
+        jTable1.getColumnModel().getColumn(4).setCellRenderer(new CurrencyRenderer());
 
     }
 
@@ -306,6 +311,20 @@ public class Pdv extends javax.swing.JFrame {
                         .addComponent(jbAddProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbLimparTabelaProdutos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jScrollPane2)
+                                .addComponent(jtfQuantItens, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addComponent(jtfValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                                .addComponent(jLabel7))
+                            .addComponent(jLabel8))
+                        .addGap(86, 86, 86))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
@@ -319,21 +338,7 @@ public class Pdv extends javax.swing.JFrame {
                             .addComponent(jtfNomeCliente))
                         .addGap(18, 18, 18)
                         .addComponent(jbLimpaCliente)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jbLimparTabelaProdutos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane2)
-                                .addComponent(jtfQuantItens, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                                .addComponent(jLabel6)
-                                .addComponent(jtfValorTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel8))
-                        .addGap(86, 86, 86))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -450,13 +455,18 @@ public class Pdv extends javax.swing.JFrame {
     }//GEN-LAST:event_jbAddClienteActionPerformed
 
     private void jbFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbFinalizarActionPerformed
-
+        
         new Thread(() -> {
             try {
                 jbFinalizar.setEnabled(false);
-                this.toBack();
+                //this.toBack();
+                Pdv pdv2 = new Pdv(this);
+                pdv2.setVisible(true);
                 Thread.sleep(5000);
                 finalizarVenda();
+                this.dispose();
+                
+                //limpaParaNovaVenda();
                 this.toFront();
                 this.repaint();
 
@@ -484,6 +494,11 @@ public class Pdv extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbLimparTabelaProdutosActionPerformed
 
+    public void limpaParaNovaVenda(){
+        limparCamposCliente();
+        limparObservacao();
+        limparTabelaProdutos();
+    }
     public void ajustarLarguraColunas() {
         for (int col = 0; col < jTable1.getColumnCount(); col++) {
             TableColumn tableColumn = jTable1.getColumnModel().getColumn(col);
@@ -516,7 +531,7 @@ public class Pdv extends javax.swing.JFrame {
         }
         getValueTotal();
         updateRowCount();
-        updateFinalizarButtonState(); 
+        updateFinalizarButtonState();
     }
 
     private void fecharTelaPdv() {
@@ -556,7 +571,7 @@ public class Pdv extends javax.swing.JFrame {
         jtfNomeCliente.setText(cliente.getNome());
         jtfTelefone.setText(cliente.getTelefone());
         jtfEmail.setText(cliente.getEmail());
-        updateFinalizarButtonState(); 
+        updateFinalizarButtonState();
     }
 
     private void limparCamposCliente() {
@@ -564,7 +579,7 @@ public class Pdv extends javax.swing.JFrame {
         jtfNomeCliente.setText("");
         jtfTelefone.setText("");
         jtfEmail.setText("");
-        updateFinalizarButtonState(); 
+        updateFinalizarButtonState();
     }
 
     private void limparObservacao() {
@@ -574,7 +589,7 @@ public class Pdv extends javax.swing.JFrame {
     private void limparTabelaProdutos() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
-        updateFinalizarButtonState(); 
+        updateFinalizarButtonState();
     }
 
     public void getValueTotal() {
@@ -714,8 +729,8 @@ public class Pdv extends javax.swing.JFrame {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Erro ao inserir venda: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     jbFinalizar.setEnabled(true);
-                }finally{
-                    updateFinalizarButtonState(); 
+                } finally {
+                    updateFinalizarButtonState();
                 }
             }
         }.execute();

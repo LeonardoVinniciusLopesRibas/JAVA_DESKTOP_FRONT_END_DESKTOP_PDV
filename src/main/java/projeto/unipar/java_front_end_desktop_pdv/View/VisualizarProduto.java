@@ -1,16 +1,21 @@
 package projeto.unipar.java_front_end_desktop_pdv.View;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import projeto.unipar.java_front_end_desktop_pdv.Model.Produto;
 import projeto.unipar.java_front_end_desktop_pdv.Services.ProdutoService;
+import projeto.unipar.java_front_end_desktop_pdv.Util.CurrencyRenderer;
 import projeto.unipar.java_front_end_desktop_pdv.Util.CustomRowHeight;
 import projeto.unipar.java_front_end_desktop_pdv.Util.Log;
 import projeto.unipar.java_front_end_desktop_pdv.Util.SetIconJFrame;
@@ -33,6 +38,7 @@ public class VisualizarProduto extends javax.swing.JFrame {
         addDoubleClickAction();
         setIcon.setIconJFrame(this);
         jTable1.setDefaultRenderer(Object.class, new CustomRowHeight(rowHeight));
+        jTable1.getColumnModel().getColumn(2).setCellRenderer(new CurrencyRenderer());
     }
 
     private void addDoubleClickAction() {
@@ -175,6 +181,8 @@ public class VisualizarProduto extends javax.swing.JFrame {
         }
     }
 
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
